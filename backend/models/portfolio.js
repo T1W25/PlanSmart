@@ -3,37 +3,10 @@
 
 const mongoose = require('mongoose');
 
-const VendorSchema = new mongoose.Schema({
-  VendorID: Number,
-  Name: String,
-  Email: String,
-  Phone: String,
-  isVerified: Boolean,
-});
-
-const GuestSpeakerSchema = new mongoose.Schema({
-  SpeakerID: Number,
-  Name: String,
-  Email: String,
-  Phone: String,
-  isVerified: Boolean,
-});
-
-const TransportationProviderSchema = new mongoose.Schema({
-  ProviderID: Number,
-  Name: String,
-  Email: String,
-  Phone: String,
-  isVerified: Boolean,
-});
-
 const PortfolioSchema = new mongoose.Schema({
-  PortfolioID: Number,
-  Type: String,
-  Description: String,
-  Vendors: [VendorSchema],
-  GuestSpeakers: [GuestSpeakerSchema],
-  TransportationProviders: [TransportationProviderSchema]
+  PortfolioID: { type: Number, required: true, unique: true },
+  Type: { type: String, required: true },
+  Description: { type: String, required: true }
 });
 
 module.exports = mongoose.model('Portfolio', PortfolioSchema);
