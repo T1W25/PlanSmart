@@ -3,11 +3,14 @@
 const express = require('express');
 const router = express.Router();
 const Portfolio = require('../models/Portfolio'); // ✅ Import Portfolio model
+const GuestSpeaker = require('../models/GuestSpeaker');
+const TransportationProvider = require('../models/TransportationProvider');
+const Vendor = require('../models/Vendor');
 
-// ✅ GET: Fetch all portfolios
-router.get('/', async (req, res) => {
+// ✅ GET: Fetch all guestspeaker portfolios
+router.get('/GuestSpeaker', async (req, res) => {
   try {
-    const portfolios = await Portfolio.find();
+    const portfolios = await GuestSpeaker.find();
     res.json(portfolios);
   } catch (error) {
     console.error('Portfolio Fetch Error:', error);
@@ -15,10 +18,32 @@ router.get('/', async (req, res) => {
   }
 });
 
-// ✅ POST: Create a new portfolio
-router.post('/', async (req, res) => {
+// ✅ GET: Fetch all TransportationProvider portfolios
+router.get('/TransportationProvider', async (req, res) => {
   try {
-    const newPortfolio = new Portfolio(req.body);
+    const portfolios = await TransportationProvider.find();
+    res.json(portfolios);
+  } catch (error) {
+    console.error('Portfolio Fetch Error:', error);
+    res.status(500).json({ msg: 'Server Error' });
+  }
+});
+
+// ✅ GET: Fetch all Vendor portfolios
+router.get('/Vendor', async (req, res) => {
+  try {
+    const portfolios = await Vendor.find();
+    res.json(portfolios);
+  } catch (error) {
+    console.error('Portfolio Fetch Error:', error);
+    res.status(500).json({ msg: 'Server Error' });
+  }
+});
+
+// ✅ POST: Create a new GuestSpeaker profile
+router.post('/GuestSpeaker', async (req, res) => {
+  try {
+    const newPortfolio = new GuestSpeaker(req.body);
     const savedPortfolio = await newPortfolio.save();
     res.status(201).json(savedPortfolio);
   } catch (error) {
@@ -26,6 +51,32 @@ router.post('/', async (req, res) => {
     res.status(500).json({ msg: 'Server Error' });
   }
 });
+
+// ✅ POST: Create a new Vendor profile
+router.post('/Vendor', async (req, res) => {
+  try {
+    const newPortfolio = new Vendor(req.body);
+    const savedPortfolio = await newPortfolio.save();
+    res.status(201).json(savedPortfolio);
+  } catch (error) {
+    console.error('Portfolio Creation Error:', error);
+    res.status(500).json({ msg: 'Server Error' });
+  }
+});
+
+// ✅ POST: Create a new TransportationProvider profile
+router.post('/GuestSpeaker', async (req, res) => {
+  try {
+    const newPortfolio = new TransportationProvider(req.body);
+    const savedPortfolio = await newPortfolio.save();
+    res.status(201).json(savedPortfolio);
+  } catch (error) {
+    console.error('Portfolio Creation Error:', error);
+    res.status(500).json({ msg: 'Server Error' });
+  }
+});
+
+
 
 // ✅ PUT: Update a portfolio by ID
 router.put('/:id', async (req, res) => {

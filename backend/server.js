@@ -13,11 +13,17 @@ app.use(express.json());
 app.use(cors());
 
 // Portfolio Routes
-const portfolioRoutes = require('./routes/PortfolioRoutes');
-app.use('/api/Portfolio', portfolioRoutes);
+const guestSpeakerRoutes = require('./routes/GuestSpeakerRoutes');
+const vendorRoutes = require('./routes/VendorRoutes');
+const transportationProviderRoutes = require('./routes/transportationProviderRoutes');
+
+// Use Routes
+app.use('/api/guest-speakers', guestSpeakerRoutes);
+app.use('/api/vendors', vendorRoutes);
+app.use('/api/transportation-providers', transportationProviderRoutes);
 
 // Server Start
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
