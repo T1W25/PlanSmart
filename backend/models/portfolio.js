@@ -1,6 +1,3 @@
-// backend/models/Portfolio.js
-
-
 const mongoose = require('mongoose');
 
 const VendorSchema = new mongoose.Schema({
@@ -9,6 +6,7 @@ const VendorSchema = new mongoose.Schema({
   Email: String,
   Phone: String,
   isVerified: Boolean,
+  Status: { type: String, enum: ['Pending', 'Accepted', 'Declined'], default: 'Pending' }
 });
 
 const GuestSpeakerSchema = new mongoose.Schema({
