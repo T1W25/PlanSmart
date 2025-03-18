@@ -1,3 +1,4 @@
+//This is a Schema
 const mongoose = require("mongoose");
 
 const ClientReviewSchema = new mongoose.Schema({
@@ -7,4 +8,4 @@ const ClientReviewSchema = new mongoose.Schema({
     date: { type: Date, default: Date.now }
   });
 
-  module.exports = mongoose.model('ClientReview', ClientReviewSchema);
+module.exports = ClientReviewSchema;

@@ -46,33 +46,6 @@ router.put('/:id', async (req, res) => {
     }
   });
   
-  // ✅ PUT: Update only Portfolio
-  router.put('/portfolio/:id', async (req, res) => {
-    try {
-      const { Type, Description } = req.body;
-  
-      const updatedProvider = await TransportationProvider.findByIdAndUpdate(
-        req.params.id,
-        { 
-          $set: { 
-            "Portfolio.Type": Type, 
-            "Portfolio.Description": Description 
-          } 
-        },
-        { new: true, runValidators: true }
-      );
-  
-      if (!updatedProvider) {
-        return res.status(404).json({ msg: 'Transportation Provider not found' });
-      }
-  
-      res.json(updatedProvider);
-    } catch (error) {
-      console.error('Transportation Provider Portfolio Update Error:', error);
-      res.status(500).json({ msg: 'Server Error' });
-    }
-  });
-  
   // ✅ALL DELETE REQUESTS✅
   // ✅ DELETE: Remove a transportation provider by ID
   router.delete('/:id', async (req, res) => {

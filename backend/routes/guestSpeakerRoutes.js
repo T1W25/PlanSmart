@@ -27,7 +27,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-// ✅ALL PUT REQUESTS✅
 // ✅ PUT: Update a guest speaker by ID
 router.put('/:id', async (req, res) => {
   try {
@@ -46,32 +45,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// ✅ PUT: Update only Type and Portfolio
-router.put('/portfolio/:id', async (req, res) => {
-  try {
-    const { Type, Description } = req.body;
 
-    const updatedGuestSpeaker = await GuestSpeaker.findByIdAndUpdate(
-      req.params.id,
-      { 
-        $set: { 
-          "Portfolio.Type": Type, 
-          "Portfolio.Description": Description 
-        } 
-      },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedGuestSpeaker) {
-      return res.status(404).json({ msg: 'Guest Speaker not found' });
-    }
-
-    res.json(updatedGuestSpeaker);
-  } catch (error) {
-    console.error('Guest Speaker Portfolio Update Error:', error);
-    res.status(500).json({ msg: 'Server Error' });
-  }
-});
 
 // ✅ALL DELETE REQUESTS✅
 // ✅ DELETE: Remove a guest speaker by ID

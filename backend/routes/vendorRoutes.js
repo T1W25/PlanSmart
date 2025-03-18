@@ -45,33 +45,6 @@ router.put('/:id', async (req, res) => {
     }
   });
   
-  // ✅ PUT: Update only Portfolio
-  router.put('/portfolio/:id', async (req, res) => {
-    try {
-      const { Type, Description } = req.body;
-  
-      const updatedVendor = await Vendor.findByIdAndUpdate(
-        req.params.id,
-        { 
-          $set: { 
-            "Portfolio.Type": Type, 
-            "Portfolio.Description": Description 
-          } 
-        },
-        { new: true, runValidators: true }
-      );
-  
-      if (!updatedVendor) {
-        return res.status(404).json({ msg: 'Vendor not found' });
-      }
-  
-      res.json(updatedVendor);
-    } catch (error) {
-      console.error('Vendor Portfolio Update Error:', error);
-      res.status(500).json({ msg: 'Server Error' });
-    }
-  });
-  
     // ✅ALL DELETE REQUESTS✅
   // ✅ DELETE: Remove a vendor by ID
   router.delete('/:id', async (req, res) => {
