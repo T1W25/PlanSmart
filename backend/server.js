@@ -1,22 +1,54 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
+require('dotenv').config();
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const cors = require('cors');
+const connectDB = require('./config/db');
 
 const app = express();
+
+// Connect Database
+connectDB();
 
 // Middleware
 app.use(express.json());
 app.use(cors());
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGO_URI, {
-}).then(() => console.log("MongoDB connected"))
-  .catch(err => console.error(err));
+//Serve static files (for accessing uploaded files)
+app.use("/uploads", express.static('uploads'));
 
-// Routes
-app.use("/api/organizations", require("./routes/organizationRoutes"));
+//Setup Multer Storage for File Uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Save files in "uploads" folder
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Rename file with timestamp
+  },
+});
 
-// Start Server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const upload = multer({ storage });
+
+// Upload Route
+app.post("/api/upload", upload.single("media"), (req, res) => {
+  if (!req.file) return res.status(400).json({ msg: "No file uploaded" });
+  res.json({ filePath: `/uploads/${req.file.filename}` });
+});
+
+// Portfolio Routes
+const guestSpeakerRoutes = require('./routes/GuestSpeakerRoutes');
+const vendorRoutes = require('./routes/VendorRoutes');
+const transportationProviderRoutes = require('./routes/transportationProviderRoutes');
+const portfolioRoutes = require('./routes/PortfolioRoutes');
+
+// Use Routes
+app.use('/api/guest-speakers', guestSpeakerRoutes);
+app.use('/api/vendors', vendorRoutes);
+app.use('/api/transportation-providers', transportationProviderRoutes);
+app.use('/api/portfolio', portfolioRoutes);
+
+// Server Start
+const PORT = process.env.PORT || 5050;
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});
