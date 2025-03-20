@@ -7,23 +7,22 @@ const Vendor = require('../models/Vendor');
 const GuestSpeaker = require('../models/GuestSpeaker');
 require('dotenv').config();
 
-// Configure Multer for File Upload (In-Memory Storage)
+// ✅ Configure Multer for File Upload (In-Memory Storage)
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Cloudinary Configuration
+// ✅ Cloudinary Configuration
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// GET: Retrieve Portfolio by ID (Works for GuestSpeaker, Vendor, and TransportationProvider)
+// ✅ GET: Retrieve Portfolio by ID
 router.get('/:id', async (req, res) => {
   try {
     const entityId = req.params.id;
 
-    // Find the correct entity in any collection
     let entity = await GuestSpeaker.findById(entityId) ||
                  await Vendor.findById(entityId) ||
                  await TransportationProvider.findById(entityId);
@@ -34,41 +33,49 @@ router.get('/:id', async (req, res) => {
 
     res.json(entity.Portfolio);
   } catch (error) {
-    console.error('Portfolio Fetch Error:', error);
+    console.error('🚨 Portfolio Fetch Error:', error);
     res.status(500).json({ msg: 'Server Error' });
   }
 });
 
-// Unified PUT Route for Portfolio Updates (Automatically Detects Entity Type)
+// ✅ PUT: Update Portfolio (Auto-Detects Entity)
+// Unified PUT Route for Portfolio Updates
 router.put('/:id', async (req, res) => {
-    try {
-        const { Type, Description } = req.body;
-        const entityId = req.params.id;
+  try {
+      const { Type, Description } = req.body;
+      const entityId = req.params.id;
 
-        // Find the correct entity in any collection
-        let entity = await Vendor.findById(entityId) || 
-                     await GuestSpeaker.findById(entityId) || 
-                     await TransportationProvider.findById(entityId);
+      // Find the correct entity in any collection
+      let entity = await Vendor.findById(entityId) || 
+                   await GuestSpeaker.findById(entityId) || 
+                   await TransportationProvider.findById(entityId);
 
-        if (!entity) {
-            return res.status(404).json({ msg: "Entity not found in any collection" });
-        }
+      if (!entity) {
+          return res.status(404).json({ msg: "Entity not found in any collection" });
+      }
 
-        // Perform the update
-        const updatedEntity = await entity.constructor.findByIdAndUpdate(
-            entityId,
-            { $set: { "Portfolio.Type": Type, "Portfolio.Description": Description } },
-            { new: true, runValidators: true }
-        );
+      // ✅ Perform the update (Modify the nested Portfolio)
+      const updatedEntity = await entity.constructor.findByIdAndUpdate(
+          entityId,
+          { 
+            $set: { 
+              "Portfolio.Type": Type, 
+              "Portfolio.Description": Description 
+            }
+          },
+          { new: true, runValidators: true }
+      );
 
-        res.json(updatedEntity);
-    } catch (error) {
-        console.error(' Portfolio Update Error:', error);
-        res.status(500).json({ msg: 'Server Error' });
-    }
+      res.json({ msg: "✅ Portfolio updated successfully", updatedEntity });
+
+  } catch (error) {
+      console.error("🚨 Portfolio Update Error:", error);
+      res.status(500).json({ msg: "Server Error" });
+  }
 });
 
-// Upload Media to Cloudinary & Save to Portfolio
+
+// ✅ POST: Upload Media to Cloudinary & Save to Portfolio
 router.post('/upload/:id', upload.single('media'), async (req, res) => {
   try {
     const { id } = req.params;
@@ -78,44 +85,106 @@ router.post('/upload/:id', upload.single('media'), async (req, res) => {
       return res.status(400).json({ msg: "No file uploaded" });
     }
 
-    console.log(`Uploading file for ID: ${id}`);
+    console.log(`📤 Uploading file for ID: ${id}`);
 
-    // Upload file to Cloudinary
-    cloudinary.uploader.upload_stream({ resource_type: "auto" }, async (error, uploadedFile) => {
-      if (error) {
-        console.error("Cloudinary Upload Error:", error);
-        return res.status(500).json({ msg: "Cloudinary upload failed", error });
-      }
+    // ✅ Upload file to Cloudinary with resizing
+    cloudinary.uploader.upload_stream(
+      {
+        resource_type: "auto",
+        folder: "portfolios",
+        transformation: [
+          { width: 800, height: 600, crop: "limit" }, // ✅ Resize to 800x600
+        ],
+      },
+      async (error, uploadedFile) => {
+        if (error) {
+          console.error("🚨 Cloudinary Upload Error:", error);
+          return res.status(500).json({ msg: "Cloudinary upload failed", error });
+        }
 
-      console.log("File Uploaded:", uploadedFile.secure_url);
+        console.log("✅ File Uploaded:", uploadedFile.secure_url);
 
-      // Find the correct entity
-      let entity = await Vendor.findById(id) || 
-                   await GuestSpeaker.findById(id) || 
-                   await TransportationProvider.findById(id);
+        let entity = await Vendor.findById(id) || 
+                     await GuestSpeaker.findById(id) || 
+                     await TransportationProvider.findById(id);
 
-      if (!entity) {
-        return res.status(404).json({ msg: "Entity not found in any collection" });
-      }
+        if (!entity) {
+          return res.status(404).json({ msg: "Entity not found in any collection" });
+        }
 
-      // Add media to Portfolio
-      const updatedEntity = await entity.constructor.findByIdAndUpdate(
+        const updatedEntity = await entity.constructor.findByIdAndUpdate(
           id,
-          { $push: { "Portfolio.PastWorkMedia": uploadedFile.secure_url } }, // Push new media to array
+          { $push: { "Portfolio.PastWorkMedia": uploadedFile.secure_url } },
           { new: true }
-      );
+        );
 
-      res.json({
-        msg: "Media uploaded successfully",
-        mediaUrl: uploadedFile.secure_url,
-        updatedEntity,
-      });
-    }).end(file.buffer);
+        res.json({
+          msg: "✅ Media uploaded successfully",
+          mediaUrl: uploadedFile.secure_url,
+          updatedEntity,
+        });
+      }
+    ).end(file.buffer);
 
   } catch (error) {
-    console.error("Upload Route Error:", error);
+    console.error("🚨 Upload Route Error:", error);
     res.status(500).json({ msg: "Server Error", error });
   }
 });
+
+// ✅ DELETE: Remove media from Cloudinary & Database
+router.delete('/media/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { mediaUrl } = req.body; // ✅ Media URL to delete
+
+    if (!mediaUrl) {
+      return res.status(400).json({ msg: "Media URL is required" });
+    }
+
+    console.log(`🗑 Deleting media for ID: ${id}`);
+
+    // ✅ Correct Cloudinary Public ID Extraction
+    const urlParts = mediaUrl.split("/");
+    const publicIdWithExtension = urlParts[urlParts.length - 1]; // Last part of URL
+    const publicId = publicIdWithExtension.split(".")[0]; // Remove extension
+
+    console.log("Extracted Public ID:", publicId);
+
+    // ✅ Delete from Cloudinary
+    const cloudinaryResponse = await cloudinary.uploader.destroy(`portfolios/${publicId}`);
+    console.log("✅ Cloudinary Delete Response:", cloudinaryResponse);
+
+    if (cloudinaryResponse.result !== "ok") {
+      return res.status(500).json({ msg: "Failed to delete media from Cloudinary" });
+    }
+
+    // ✅ Find the correct entity
+    let entity = await Vendor.findById(id) ||
+                 await GuestSpeaker.findById(id) ||
+                 await TransportationProvider.findById(id);
+
+    if (!entity) {
+      return res.status(404).json({ msg: "Entity not found in any collection" });
+    }
+
+    // ✅ Remove the media URL from PastWorkMedia array
+    const updatedEntity = await entity.constructor.findByIdAndUpdate(
+      id,
+      { $pull: { "Portfolio.PastWorkMedia": mediaUrl } }, // ✅ Pull media from array
+      { new: true }
+    );
+
+    res.json({
+      msg: "✅ Media deleted successfully",
+      updatedEntity,
+    });
+
+  } catch (error) {
+    console.error("🚨 Media Delete Error:", error);
+    res.status(500).json({ msg: "Server Error", error });
+  }
+});
+
 
 module.exports = router;

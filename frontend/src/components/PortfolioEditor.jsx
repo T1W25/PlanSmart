@@ -64,20 +64,24 @@ const PortfolioEditor = ({ modelId = "67d9acf452f588f77d3d63f9", initialPortfoli
     e.preventDefault();
 
     try {
-      const url = `http://localhost:5050/api/portfolio/${modelId}`; //using hardcoded ID
+      const url = `http://localhost:5050/api/portfolio/${modelId}`; // Using hardcoded ID
 
       console.log("Sending request to:", url);
 
-      const response = await axios.put(url, { entityType, ...portfolio });
+      const response = await axios.put(url, {
+        Type: portfolio.Type,
+        Description: portfolio.Description, 
+      });
 
       alert("Portfolio Updated Successfully!");
       console.log("Portfolio Saved:", response.data);
 
     } catch (error) {
-      console.error( "Save Portfolio Error:", error.response ? error.response.data : error.message);
+      console.error("Save Portfolio Error:", error.response ? error.response.data : error.message);
       alert("Error saving portfolio. Check console for details.");
     }
   };
+
 
   return (
     <div className="bg-white shadow-md p-6 rounded-md">
