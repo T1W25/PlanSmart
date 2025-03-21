@@ -1,6 +1,6 @@
 import React from "react";
 
-const PortfolioShowcase = ({ onEditClick, onViewAllClick }) => {
+const PortfolioShowcase = ({ onEditClick, onViewAllClick, showCase1, showCase2 }) => {
   return (
     <div className="bg-white rounded-lg border border-gray-300 p-6 w-full max-w-5xl mx-auto shadow-sm mt-6">
       {/* Header Section */}
@@ -17,11 +17,19 @@ const PortfolioShowcase = ({ onEditClick, onViewAllClick }) => {
 
       {/* Showcase Grid */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="w-full h-80 bg-gray-300 rounded-lg flex items-center justify-center text-gray-600 text-sm">
-          Showcase 1
+      <div className="w-full h-80 bg-gray-300 rounded-lg flex items-center justify-center text-gray-600 text-sm">
+          {showCase1 ? (
+            <img src={showCase1} alt="Showcase 1" className="w-full h-full object-cover rounded-lg" />
+          ) : (
+            "No Image Available"
+          )}
         </div>
         <div className="w-full h-80 bg-gray-300 rounded-lg flex items-center justify-center text-gray-600 text-sm">
-          Showcase 2
+        {showCase1 ? (
+            <img src={showCase2} alt="Showcase 1" className="w-full h-full object-cover rounded-lg" />
+          ) : (
+            "No Image Available"
+          )}
         </div>
       </div>
 

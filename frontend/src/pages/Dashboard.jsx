@@ -40,6 +40,8 @@ function Dashboard() {
       {userData && (
         <PortfolioShowcase
           portfolioData={userData.Portfolio}
+          showCase1={userData.Portfolio.PastWorkMedia[0]}
+          showCase2={userData.Portfolio.PastWorkMedia[1]}
           onEditClick={() => console.log("Edit Portfolio Clicked")}
           onViewAllClick={() => console.log("View All Clicked")}
         />
