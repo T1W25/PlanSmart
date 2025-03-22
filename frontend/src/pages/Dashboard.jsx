@@ -6,7 +6,7 @@ import PortfolioShowcase from "../components/PortfolioShowcase";
 
 function Dashboard() {
   const [userData, setUserData] = useState(null);
-  const userId = "67d9acf452f588f77d3d63f9"; // Test user ID
+  const userId = "67d9acf452f588f77d3d63f9";
 
   useEffect(() => {
     axios
@@ -40,8 +40,8 @@ function Dashboard() {
       {userData && (
         <PortfolioShowcase
           portfolioData={userData.Portfolio}
-          showCase1={userData.Portfolio.PastWorkMedia[0]}
-          showCase2={userData.Portfolio.PastWorkMedia[1]}
+          showCase1={userData.Portfolio.PastWorkMedia[userData.Portfolio.PastWorkMedia.length - 1] || "No Media Available"}
+          showCase2={userData.Portfolio.PastWorkMedia[userData.Portfolio.PastWorkMedia.length - 2] || "No Media Available"}
           onEditClick={() => console.log("Edit Portfolio Clicked")}
           onViewAllClick={() => console.log("View All Clicked")}
         />

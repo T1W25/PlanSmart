@@ -1,6 +1,22 @@
 import React from "react";
 
 const PortfolioShowcase = ({ onEditClick, onViewAllClick, showCase1, showCase2 }) => {
+  // Function to determine whether the media is an image or a video
+  const renderMedia = (mediaUrl) => {
+    if (!mediaUrl) return "No media available";
+
+    const isVideo = mediaUrl.match(/\.(mp4|webm|ogg)$/i); // Check for video extensions
+
+    return isVideo ? (
+      <video className="w-full h-full object-cover rounded-lg" controls>
+        <source src={mediaUrl} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    ) : (
+      <img src={mediaUrl} alt="Showcase" className="w-full h-full object-cover rounded-lg" />
+    );
+  };
+
   return (
     <div className="bg-white rounded-lg border border-gray-300 p-6 w-full max-w-5xl mx-auto shadow-sm mt-6">
       {/* Header Section */}
@@ -17,19 +33,11 @@ const PortfolioShowcase = ({ onEditClick, onViewAllClick, showCase1, showCase2 }
 
       {/* Showcase Grid */}
       <div className="grid grid-cols-2 gap-4">
-      <div className="w-full h-80 bg-gray-300 rounded-lg flex items-center justify-center text-gray-600 text-sm">
-          {showCase1 ? (
-            <img src={showCase1} alt="Showcase 1" className="w-full h-full object-cover rounded-lg" />
-          ) : (
-            "No Image Available"
-          )}
+        <div className="w-full h-80 bg-gray-300 rounded-lg flex items-center justify-center">
+          {renderMedia(showCase1)}
         </div>
-        <div className="w-full h-80 bg-gray-300 rounded-lg flex items-center justify-center text-gray-600 text-sm">
-        {showCase1 ? (
-            <img src={showCase2} alt="Showcase 1" className="w-full h-full object-cover rounded-lg" />
-          ) : (
-            "No Image Available"
-          )}
+        <div className="w-full h-80 bg-gray-300 rounded-lg flex items-center justify-center">
+          {renderMedia(showCase2)}
         </div>
       </div>
 

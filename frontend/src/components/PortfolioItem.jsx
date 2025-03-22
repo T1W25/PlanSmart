@@ -4,24 +4,24 @@ import axios from "axios";
 const PortfolioItem = ({ Type, Description, PastWorkMedia = [] }) => {
   const [mediaList, setMediaList] = useState(PastWorkMedia);
 
-  const hardcodedEntityId = "67d9acf452f588f77d3d63f9"; // ✅ Hardcoded for testing
+  const hardcodedEntityId = "67d9acf452f588f77d3d63f9"; // Hardcoded for testing
 
-  // ✅ Handle Media Deletion
+  // Handle Media Deletion
   const handleDelete = async (mediaUrl) => {
     if (!window.confirm("Are you sure you want to delete this media?")) return;
 
     try {
       const response = await axios.delete(`http://localhost:5050/api/portfolio/media/${hardcodedEntityId}`, {
-        data: { mediaUrl }, // ✅ Send media URL in request body
+        data: { mediaUrl }, // Send media URL in request body
       });
 
-      alert("✅ Media deleted successfully!");
+      alert("Media deleted successfully!");
       console.log(response.data);
 
-      // ✅ Remove from UI
+      // Remove from UI
       setMediaList((prev) => prev.filter((url) => url !== mediaUrl));
     } catch (error) {
-      console.error("🚨 Delete Error:", error.response?.data || error.message);
+      console.error("Delete Error:", error.response?.data || error.message);
       alert("Error deleting media");
     }
   };
@@ -40,7 +40,7 @@ const PortfolioItem = ({ Type, Description, PastWorkMedia = [] }) => {
             ) : (
               <img src={media} alt="Portfolio" className="w-full h-40 object-cover rounded-md" />
             )}
-            {/* ❌ Delete Button */}
+            {/* Delete Button */}
             <button
               onClick={() => handleDelete(media)}
               className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full"

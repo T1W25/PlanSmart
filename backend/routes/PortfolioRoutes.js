@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
 
     res.json(entity.Portfolio);
   } catch (error) {
-    console.error('🚨 Portfolio Fetch Error:', error);
+    console.error('Portfolio Fetch Error:', error);
     res.status(500).json({ msg: 'Server Error' });
   }
 });
@@ -69,7 +69,7 @@ router.put('/:id', async (req, res) => {
       res.json({ msg: "✅ Portfolio updated successfully", updatedEntity });
 
   } catch (error) {
-      console.error("🚨 Portfolio Update Error:", error);
+      console.error("Portfolio Update Error:", error);
       res.status(500).json({ msg: "Server Error" });
   }
 });
@@ -85,7 +85,7 @@ router.post('/upload/:id', upload.single('media'), async (req, res) => {
       return res.status(400).json({ msg: "No file uploaded" });
     }
 
-    console.log(`📤 Uploading file for ID: ${id}`);
+    console.log(`Uploading file for ID: ${id}`);
 
     // ✅ Upload file to Cloudinary with resizing
     cloudinary.uploader.upload_stream(
@@ -98,7 +98,7 @@ router.post('/upload/:id', upload.single('media'), async (req, res) => {
       },
       async (error, uploadedFile) => {
         if (error) {
-          console.error("🚨 Cloudinary Upload Error:", error);
+          console.error("Cloudinary Upload Error:", error);
           return res.status(500).json({ msg: "Cloudinary upload failed", error });
         }
 
@@ -127,7 +127,7 @@ router.post('/upload/:id', upload.single('media'), async (req, res) => {
     ).end(file.buffer);
 
   } catch (error) {
-    console.error("🚨 Upload Route Error:", error);
+    console.error("Upload Route Error:", error);
     res.status(500).json({ msg: "Server Error", error });
   }
 });
@@ -181,7 +181,7 @@ router.delete('/media/:id', async (req, res) => {
     });
 
   } catch (error) {
-    console.error("🚨 Media Delete Error:", error);
+    console.error("Media Delete Error:", error);
     res.status(500).json({ msg: "Server Error", error });
   }
 });
