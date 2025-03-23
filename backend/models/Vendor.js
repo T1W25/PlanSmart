@@ -12,6 +12,7 @@ const VendorSchema = new mongoose.Schema({
   isVerified: { type: Boolean, default: false },
   Portfolio: { type: PortfolioSchema },
   rating: { type: Number, default: 0, min: 0, max: 5 },
+  ProfilePhoto: { type: String },
   Reviews: [ClientReviewSchema]
 });
 

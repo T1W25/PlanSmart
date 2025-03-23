@@ -3,9 +3,11 @@ import axios from "axios";
 import Navbar from "../components/Navbar";
 import ProfileCards from "../components/ProfileCards";
 import PortfolioShowcase from "../components/PortfolioShowcase";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
   const userId = "67d9acf452f588f77d3d63f9";
 
   useEffect(() => {
@@ -28,8 +30,8 @@ function Dashboard() {
             name={userData.Name}
             profession={userData.ProviderType}
             rating={userData.rating}
-            onClick={() => console.log("Card clicked!")}
-            onEditClick={() => console.log("Edit Profile clicked!")}
+            onClick={() => navigate("/pages/profileview")}
+            onEditClick={() => navigate("/pages/profileedit")}
           />
         ) : (
           <p>Loading profile...</p>
@@ -42,8 +44,8 @@ function Dashboard() {
           portfolioData={userData.Portfolio}
           showCase1={userData.Portfolio.PastWorkMedia[userData.Portfolio.PastWorkMedia.length - 1] || "No Media Available"}
           showCase2={userData.Portfolio.PastWorkMedia[userData.Portfolio.PastWorkMedia.length - 2] || "No Media Available"}
-          onEditClick={() => console.log("Edit Portfolio Clicked")}
-          onViewAllClick={() => console.log("View All Clicked")}
+          onEditClick={() => navigate("/pages/portfolioeditor")}
+          onViewAllClick={() => navigate("/pages/portfoliodisplay")}
         />
       )}
     </div>

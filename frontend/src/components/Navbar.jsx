@@ -1,17 +1,19 @@
+import { Link } from "react-router-dom";
+
+
 const Navbar = () => {
+  
   return (
     <nav className="fixed top-0 w-full bg-white border-b border-gray-300 p-4 flex justify-between items-center shadow-sm z-[50]">
       {/* Left Side - Logo */}
-      <h1 className="text-3xl font-bold">Plansmart</h1>
+      <Link to='/'>
+        <h1 className="text-3xl font-bold">Plansmart</h1>
+      </Link>
+      
 
       {/* Center - Navigation Links */}
       <div className="flex space-x-10 font-bold ml-auto">
-        <a 
-          href="#dashboard" 
-          className="text-black-600 text-sm hover:text-black transition-transform duration-300 transform hover:scale-105"
-        >
-          Dashboard
-        </a>
+      <Link to="/" className="text-black-600 text-sm hover:text-black transition-transform duration-300 transform hover:scale-105"> Dashboard</Link>
         <a 
           href="#bookings" 
           className="text-black-600 text-sm hover:text-black transition-transform duration-300 transform hover:scale-105"
