@@ -1,14 +1,23 @@
 import { useState } from 'react'
 import Portfolio from './components/PortfolioDisplay'
-import PortfolioEditors from './components/PortfolioEditor'
-import './App.css'
+import PortfolioEditor from './pages/PortfolioEditor'
+import Dashboard from './pages/Dashboard'
+import ProfileEdit from './pages/ProfileEdit'
+import ProfileView from './pages/ProfileView'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+ 
 
 function App() {
   return (
-    <>
-      <Portfolio/>
-      <PortfolioEditors/>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/pages/profileedit" element={<ProfileEdit />} />
+        <Route path="/pages/profileview" element={<ProfileView />} />
+        <Route path="/pages/portfoliodisplay" element={<Portfolio />} />
+        <Route path="/pages/portfolioeditor" element={<PortfolioEditor />} />
+      </Routes>
+    </Router>
   )
 }
 
