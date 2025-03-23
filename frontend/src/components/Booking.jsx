@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./BookingRequest.css";
 
 const BookingRequest = ({ request }) => {
   const [status, setStatus] = useState("Pending");
@@ -9,7 +8,6 @@ const BookingRequest = ({ request }) => {
 
   return (
     <div>
-        
     </div>
   );
 };
