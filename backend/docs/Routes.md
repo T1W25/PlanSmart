@@ -1,70 +1,86 @@
-# API Routes Documentation
+# 🔁 Routes Documentation
 
-This API manages **Guest Speakers, Transportation Providers, and Vendors**, allowing **CRUD (Create, Read, Update, Delete) operations**. Each entity follows a **consistent structure** for managing profiles and portfolios. The API ensures **efficient data retrieval, modification, and deletion**, with **built-in error handling** to manage unexpected failures.
+This document describes the API routes used in the **Plansmart** backend to manage different types of users—**Vendors**, **Guest Speakers**, and **Transportation Providers**—along with their associated portfolio media.
 
----
+The backend follows a RESTful structure, where each entity (vendor, guest speaker, transportation provider) has dedicated endpoints for `GET`, `POST`, `PUT`, and `DELETE` actions. Additionally, media management (uploading and deleting files like images and videos) is handled through integration with **Cloudinary**, and file parsing is managed using **Multer** middleware.
 
-## Endpoints Overview
-
-| Method | Route              | Description                     |
-|--------|-------------------|---------------------------------|
-| GET    | `/`               | Retrieve all profiles          |
-| POST   | `/`               | Create a new profile           |
-| PUT    | `/:id`            | Update a profile by ID         |
-| PUT    | `/portfolio/:id`  | Update only portfolio details  |
-| DELETE | `/:id`            | Delete a profile by ID         |
+Each entity has its own router for managing profiles, and there's a shared router for handling portfolio updates and media uploads. This structure allows efficient code reuse and cleaner API logic.
 
 ---
 
-## Guest Speaker Routes
+## 👤 Guest Speaker Routes
 
-**Base URL:** `/api/guest-speakers`
+These routes manage guest speaker profiles.
 
-| Method | Route             | Description                                  |
-|--------|------------------|----------------------------------------------|
-| GET    | `/`              | Fetch all guest speaker profiles.           |
-| POST   | `/`              | Create a new guest speaker profile.         |
-| PUT    | `/:id`           | Update guest speaker details.               |
-| PUT    | `/portfolio/:id` | Update portfolio details only (Type, Description). |
-| DELETE | `/:id`           | Remove a guest speaker profile.             |
+- **GET `/api/guest-speakers/`**  
+  Fetch all guest speaker profiles.
 
----
+- **POST `/api/guest-speakers/`**  
+  Create a new guest speaker profile using data sent in the request body.
 
-## Transportation Provider Routes
+- **PUT `/api/guest-speakers/:id`**  
+  Update the guest speaker profile with the given ID.
 
-**Base URL:** `/api/transportation-providers`
-
-| Method | Route             | Description                                  |
-|--------|------------------|----------------------------------------------|
-| GET    | `/`              | Fetch all transportation provider profiles. |
-| POST   | `/`              | Create a new transportation provider profile. |
-| PUT    | `/:id`           | Update transportation provider details.     |
-| PUT    | `/portfolio/:id` | Update portfolio details only.              |
-| DELETE | `/:id`           | Remove a transportation provider profile.   |
+- **DELETE `/api/guest-speakers/:id`**  
+  Remove a guest speaker profile by ID.
 
 ---
 
-## Vendor Routes
+## 🏪 Vendor Routes
 
-**Base URL:** `/api/vendors`
+These routes handle CRUD operations for vendor profiles.
 
-| Method | Route             | Description                       |
-|--------|------------------|-----------------------------------|
-| GET    | `/`              | Fetch all vendor profiles.       |
-| POST   | `/`              | Create a new vendor profile.     |
-| PUT    | `/:id`           | Update vendor details.           |
-| PUT    | `/portfolio/:id` | Update portfolio details only.   |
-| DELETE | `/:id`           | Remove a vendor profile.         |
+- **GET `/api/vendors/`**  
+  Retrieve all vendor profiles.
 
----
+- **POST `/api/vendors/`**  
+  Create a new vendor profile.
 
-## Error Handling
+- **PUT `/api/vendors/:id`**  
+  Update a vendor profile using the provided ID and request body.
 
-Each route includes **error handling** to manage:
-
-- **500 - Server Error:** Handles unexpected server issues.
-- **404 - Not Found:** Returned when a requested resource is not found.
+- **DELETE `/api/vendors/:id`**  
+  Delete a vendor from the system using their ID.
 
 ---
 
-This documentation provides a structured overview of the API routes.
+## 🚐 Transportation Provider Routes
+
+These routes manage transportation provider profiles.
+
+- **GET `/api/transportation-providers/`**  
+  Fetch all transportation provider profiles.
+
+- **GET `/api/transportation-providers/:id`**  
+  Retrieve a single transportation provider by ID.
+
+- **POST `/api/transportation-providers/`**  
+  Create a new transportation provider profile.
+
+- **PUT `/api/transportation-providers/:id`**  
+  Update an existing transportation provider profile.
+
+- **DELETE `/api/transportation-providers/:id`**  
+  Remove a transportation provider from the system.
+
+---
+
+## 🖼 Portfolio Routes (Unified Media Management)
+
+These routes manage portfolio updates and media uploads across all provider types (Vendor, Guest Speaker, Transportation Provider).
+
+- **GET `/api/portfolio/:id`**  
+  Retrieve the portfolio of any provider by ID. The route auto-detects whether the ID belongs to a vendor, guest speaker, or transportation provider.
+
+- **PUT `/api/portfolio/:id`**  
+  Update the `Type` and `Description` fields of the provider’s portfolio.
+
+- **POST `/api/portfolio/upload/:id`**  
+  Upload an image or video to the provider’s portfolio. The file is resized (800x600) and stored in Cloudinary. The secure URL is saved to the `PastWorkMedia` array in the portfolio.
+
+- **DELETE `/api/portfolio/media/:id`**  
+  Remove a specific media file from both Cloudinary and the provider’s portfolio based on the media URL provided in the request body. This supports both images and video formats.
+
+---
+
+These routes make the platform flexible and scalable by enabling seamless CRUD operations across different provider types and centralizing portfolio/media management logic.
