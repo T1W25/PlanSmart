@@ -136,30 +136,38 @@ router.post('/upload/:id', upload.single('media'), async (req, res) => {
 router.delete('/media/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { mediaUrl } = req.body; // ✅ Media URL to delete
+    const { mediaUrl } = req.body;
 
     if (!mediaUrl) {
       return res.status(400).json({ msg: "Media URL is required" });
     }
 
     console.log(`🗑 Deleting media for ID: ${id}`);
+    console.log("🧠 Media URL:", mediaUrl);
 
-    // ✅ Correct Cloudinary Public ID Extraction
+    // Extract public ID
     const urlParts = mediaUrl.split("/");
-    const publicIdWithExtension = urlParts[urlParts.length - 1]; // Last part of URL
-    const publicId = publicIdWithExtension.split(".")[0]; // Remove extension
+    const publicIdWithExtension = urlParts[urlParts.length - 1];
+    const publicId = publicIdWithExtension.split(".")[0];
 
-    console.log("Extracted Public ID:", publicId);
+    console.log("🧠 Extracted Public ID:", publicId);
+
+    // Detect media type
+    const isVideo = mediaUrl.match(/\.(mp4|webm|ogg)$/i);
 
     // ✅ Delete from Cloudinary
-    const cloudinaryResponse = await cloudinary.uploader.destroy(`portfolios/${publicId}`);
+    const cloudinaryResponse = await cloudinary.uploader.destroy(
+      `portfolios/${publicId}`,
+      { resource_type: isVideo ? "video" : "image" }
+    );
+
     console.log("✅ Cloudinary Delete Response:", cloudinaryResponse);
 
-    if (cloudinaryResponse.result !== "ok") {
-      return res.status(500).json({ msg: "Failed to delete media from Cloudinary" });
+    if (cloudinaryResponse.result !== "ok" && cloudinaryResponse.result !== "not found") {
+      return res.status(500).json({ msg: "Failed to delete media from Cloudinary", cloudinaryResponse });
     }
 
-    // ✅ Find the correct entity
+    // Remove from DB
     let entity = await Vendor.findById(id) ||
                  await GuestSpeaker.findById(id) ||
                  await TransportationProvider.findById(id);
@@ -168,10 +176,9 @@ router.delete('/media/:id', async (req, res) => {
       return res.status(404).json({ msg: "Entity not found in any collection" });
     }
 
-    // ✅ Remove the media URL from PastWorkMedia array
     const updatedEntity = await entity.constructor.findByIdAndUpdate(
       id,
-      { $pull: { "Portfolio.PastWorkMedia": mediaUrl } }, // ✅ Pull media from array
+      { $pull: { "Portfolio.PastWorkMedia": mediaUrl } },
       { new: true }
     );
 
@@ -181,10 +188,12 @@ router.delete('/media/:id', async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Media Delete Error:", error);
-    res.status(500).json({ msg: "Server Error", error });
+    console.error("❌ Media Delete Error:", error.message);
+    console.error(error.stack);
+    res.status(500).json({ msg: "Server Error", error: error.message });
   }
 });
+
 
 
 module.exports = router;
