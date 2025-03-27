@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
+import AvailabilityToggle from "../components/AvailabilityToggle"; // Adjust the path as needed
 
 const ProfileEdit = () => {
   const userId = "67d9acf452f588f77d3d63f9";
-
-  
 
   const [formData, setFormData] = useState({
     Name: "",
@@ -13,6 +12,7 @@ const ProfileEdit = () => {
     Phone: "",
     Password: "",
     isVerified: false,
+    isAvailable: false,
     ProfileImage: "https://res.cloudinary.com/demo/image/upload/sample.jpg",
   });
 
@@ -21,7 +21,16 @@ const ProfileEdit = () => {
       .get(`http://localhost:5050/api/transportation-providers/${userId}`)
       .then((res) => {
         const { Name, Email, Phone, isVerified, Portfolio } = res.data;
-        setFormData({Name,Email,Phone,Password: "",isVerified,ProfileImage: Portfolio?.ImageUrl || "https://res.cloudinary.com/demo/image/upload/sample.jpg"
+        setFormData({
+          Name,
+          Email,
+          Phone,
+          Password: "",
+          isVerified,
+          isAvailable: res.data.isAvailable || false, // if available in your response
+          ProfileImage:
+            Portfolio?.ImageUrl ||
+            "https://res.cloudinary.com/demo/image/upload/sample.jpg",
         });
       })
       .catch((err) => console.error("Fetch error:", err));
@@ -37,13 +46,13 @@ const ProfileEdit = () => {
         Name: formData.Name,
         Email: formData.Email,
         Phone: formData.Phone,
+        isAvailable: formData.isAvailable,
       };
-  
-      // Only include Password if it's not empty
+
       if (formData.Password.trim()) {
         payload.Password = formData.Password;
       }
-  
+
       const response = await axios.put(
         `http://localhost:5050/api/transportation-providers/${userId}`,
         payload
@@ -55,7 +64,7 @@ const ProfileEdit = () => {
       alert("Failed to update profile");
     }
   };
-  
+
   return (
     <>
       <Navbar />
@@ -115,10 +124,23 @@ const ProfileEdit = () => {
               className="w-full border rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black"
             />
           </div>
+          <div>
+            <AvailabilityToggle
+              checked={formData.isAvailable}
+              onChange={() =>
+                setFormData({
+                  ...formData,
+                  isAvailable: !formData.isAvailable,
+                })
+              }
+            />
+          </div>
 
           <div className="flex items-center space-x-4">
-            <button className="bg-black text-white px-4 py-2 rounded-md text-xs cursor-pointer
-                     hover:bg-gray-800 transition-all duration-200 transform hover:scale-105">
+            <button
+              className="bg-black text-white px-4 py-2 rounded-md text-xs cursor-pointer
+                     hover:bg-gray-800 transition-all duration-200 transform hover:scale-105"
+            >
               Verify Profile
             </button>
             <span className="text-gray-400 text-sm">
