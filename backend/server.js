@@ -40,12 +40,14 @@ const guestSpeakerRoutes = require('./routes/GuestSpeakerRoutes');
 const vendorRoutes = require('./routes/VendorRoutes');
 const transportationProviderRoutes = require('./routes/transportationProviderRoutes');
 const portfolioRoutes = require('./routes/PortfolioRoutes');
+const OrganizationRoutes = require('./routes/OrganizationRoutes');
 
 // Use Routes
 app.use('/api/guest-speakers', guestSpeakerRoutes);
 app.use('/api/vendors', vendorRoutes);
 app.use('/api/transportation-providers', transportationProviderRoutes);
 app.use('/api/portfolio', portfolioRoutes);
+app.use('/api/organization', OrganizationRoutes);
 
 // Server Start
 const PORT = process.env.PORT || 5050;
