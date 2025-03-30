@@ -9,6 +9,7 @@ const TransportationProviderSchema = new mongoose.Schema({
   Password: { type: String, required: true },
   Phone: { type: String, required: true },
   ProviderType: { type: String, default: "Transportation Provider" },
+  isAvailable: { type: Boolean, default: false },
   isVerified: { type: Boolean, default: false },
   Portfolio: { type: PortfolioSchema },
   rating: { type: Number, default: 0, min: 0, max: 5 },

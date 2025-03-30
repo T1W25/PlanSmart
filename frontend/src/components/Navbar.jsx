@@ -14,12 +14,9 @@ const Navbar = () => {
       {/* Center - Navigation Links */}
       <div className="flex space-x-10 font-bold ml-auto">
       <Link to="/" className="text-black-600 text-sm hover:text-black transition-transform duration-300 transform hover:scale-105"> Dashboard</Link>
-        <a 
-          href="#bookings" 
-          className="text-black-600 text-sm hover:text-black transition-transform duration-300 transform hover:scale-105"
-        >
+      <Link to="/booking" className="text-black-600 text-sm hover:text-black transition-transform duration-300 transform hover:scale-105">
           Bookings
-        </a>
+        </Link>
         <a 
           href="#contact" 
           className="text-black-600 text-sm hover:text-black transition-transform duration-300 transform hover:scale-105"
