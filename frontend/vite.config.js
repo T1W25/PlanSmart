@@ -9,7 +9,18 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/api': 'http://localhost:5050' // ✅ Proxy API calls to backend
+      '/api': 'http://localhost:5050'
     }
-  }
+  },
+  build: {
+    outDir: 'dist'
+  },
+  // 👇 This is the important part
+  resolve: {
+    alias: {
+      '@': '/src',
+    }
+  },
+  // 👇 Add this to support client-side routing
+  base: '/',
 });
