@@ -56,7 +56,7 @@ module.exports = app;
 
 // Start server only if not testing
 if (process.env.NODE_ENV !== 'test') {
-  const PORT = process.env.PORT || 5050;
+  const PORT = process.env.PORT || 8888;
   app.listen(PORT, () => {
     console.log(`✅ Server running on port ${PORT}`);
   });
