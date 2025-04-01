@@ -11,10 +11,14 @@ const Booking = () => {
   const [filter, setFilter] = useState('All');
   const [vendors, setVendors] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showVerifiedOnly, setShowVerifiedOnly] = useState(false);
   const [prefill, setPrefill] = useState({ name: '', email: '', details: '' });
   const [currentPage, setCurrentPage] = useState(1);
   const perPage = 5;
+
+
+
 
   useEffect(() => {
     handleFilter('All');
@@ -147,9 +151,15 @@ const Booking = () => {
   };
 
   // pagination logic
-  const paginated = vendors.slice((currentPage - 1) * perPage, currentPage * perPage);
-  const totalPages = Math.ceil(vendors.length / perPage);
-
+  const filtered = vendors.filter((vendor) => {
+    const matchesSearch = vendor?.vendor?.name?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesVerified = !showVerifiedOnly || vendor?.vendor?.isVerified;
+    return matchesSearch && matchesVerified;
+  });
+  
+  const paginated = filtered.slice((currentPage - 1) * perPage, currentPage * perPage);
+  const totalPages = Math.ceil(filtered.length / perPage);
+  
   return (
     <>
       <Navbar />
@@ -183,6 +193,25 @@ const Booking = () => {
             Book Now
           </button>
         </div>
+            {/* Search and Verified Filter */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6">
+            <input
+              type="text"
+              placeholder="Search by vendor name..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="border p-2 rounded w-full sm:w-64"
+            />
+            <label className="flex items-center space-x-2 text-sm">
+              <input
+                type="checkbox"
+                checked={showVerifiedOnly}
+                onChange={(e) => setShowVerifiedOnly(e.target.checked)}
+                className="accent-black"
+              />
+              <span>Show Verified Only</span>
+            </label>
+          </div>
 
         {/* Vendor Cards with Pagination */}
         <div className="mt-6">
