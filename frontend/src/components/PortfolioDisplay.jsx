@@ -7,11 +7,11 @@ const PortfolioDisplay = () => {
   const [error, setError] = useState(null);
 
   const hardcodedId = "67d9acf452f588f77d3d63f9"; // Hardcoded ID for testing
-
+  
   useEffect(() => {
     const fetchPortfolio = async () => {
       try {
-        const response = await axios.get(`http://localhost:5050/api/portfolio/${hardcodedId}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/portfolio/${hardcodedId}`);
         console.log("Fetched Portfolio:", response.data);
         setPortfolio(response.data);
       } catch (error) {
@@ -19,9 +19,10 @@ const PortfolioDisplay = () => {
         setError("Portfolio not found or server error.");
       }
     };
-
+  
     fetchPortfolio();
   }, []);
+  
 
   return (
     <div>

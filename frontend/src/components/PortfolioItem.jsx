@@ -9,15 +9,15 @@ const PortfolioItem = ({ Type, Description, PastWorkMedia = [] }) => {
   // Handle Media Deletion
   const handleDelete = async (mediaUrl) => {
     if (!window.confirm("Are you sure you want to delete this media?")) return;
-
+  
     try {
-      const response = await axios.delete(`http://localhost:5050/api/portfolio/media/${hardcodedEntityId}`, {
-        data: { mediaUrl }, // Send media URL in request body
+      const response = await axios.delete(`${import.meta.env.VITE_API_URL}/portfolio/media/${hardcodedEntityId}`, {
+        data: { mediaUrl },
       });
-
+  
       alert("Media deleted successfully!");
       console.log(response.data);
-
+  
       // Remove from UI
       setMediaList((prev) => prev.filter((url) => url !== mediaUrl));
     } catch (error) {
@@ -25,7 +25,7 @@ const PortfolioItem = ({ Type, Description, PastWorkMedia = [] }) => {
       alert("Error deleting media");
     }
   };
-
+  
   return (
     <div className="border p-4 rounded-md shadow-md">
       <h3 className="font-semibold">{Type}</h3>
