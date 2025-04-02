@@ -7,7 +7,7 @@ const TransportationProviderSchema = new mongoose.Schema({
   Name: { type: String, required: true },
   Email: { type: String, required: true, unique: true },
   Password: { type: String, required: true },
-  Phone: { type: String, required: true },
+  Phone: { type: String, required: false },
   ProviderType: { type: String, default: "Transportation Provider" },
   isAvailable: { type: Boolean, default: false },
   isVerified: { type: Boolean, default: false },
@@ -19,10 +19,6 @@ const TransportationProviderSchema = new mongoose.Schema({
 
 // Pre-save hook
 TransportationProviderSchema.pre("save", async function (next) {
-  if (this.isModified("Password")) {
-    const salt = await bcrypt.genSalt(10);
-    this.Password = await bcrypt.hash(this.Password, salt);
-  }
 
   if (this.Reviews.length > 0) {
     const sum = this.Reviews.reduce((acc, review) => acc + (review.rating || 0), 0);
