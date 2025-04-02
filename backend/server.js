@@ -36,6 +36,8 @@ const vendorRoutes = require('./routes/vendorRoutes');
 const transportationProviderRoutes = require('./routes/transportationProviderRoutes');
 const portfolioRoutes = require('./routes/PortfolioRoutes');
 const organizationRoutes = require('./routes/OrganizationRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
+
 
 // Add your new routes here 👇
 const bookingRoutes = require('./routes/booking');
@@ -50,6 +52,8 @@ app.use('/api/transportation-providers', transportationProviderRoutes);
 app.use('/api/portfolio', portfolioRoutes);
 app.use('/api/organization', organizationRoutes);
 app.use('/api/signin', signInRoutes);
+app.use('/api/reviews', reviewRoutes);
+
 
 // Register new routes here 👇
 app.use('/api/booking', bookingRoutes);

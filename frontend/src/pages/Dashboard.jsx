@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
 import ProfileCards from "../components/ProfileCards";
+import ReviewCards from "../components/ReviewCards";
 import PortfolioShowcase from "../components/PortfolioShowcase";
 import { getUser } from "../utils/auth";
 
@@ -83,6 +84,7 @@ function Dashboard() {
           onViewAllClick={() => navigate("/pages/portfoliodisplay")}
         />
       )}
+        <ReviewCards/>
     </div>
   );
 }
