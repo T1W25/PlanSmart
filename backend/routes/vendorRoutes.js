@@ -54,6 +54,20 @@ router.get('/', async (req, res) => {
   }
 });
 
+
+router.get('/:id', async (req, res) => {
+  try {
+    const provider = await Vendor.findById(req.params.id);
+    if (!provider) {
+      return res.status(404).json({ msg: 'Provider not found' });
+    }
+    res.json(provider);
+  } catch (error) {
+    console.error('Get by ID Error:', error);
+    res.status(500).json({ msg: 'Server Error' });
+  }
+});
+
 // ✅ POST: Create a new Vendor profile
 router.post('/', async (req, res) => {
   try {

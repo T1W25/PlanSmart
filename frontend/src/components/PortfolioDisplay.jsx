@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import PortfolioItem from "./PortfolioItem";
+import { getUser } from "../utils/auth";
 
 const PortfolioDisplay = () => {
   const [portfolio, setPortfolio] = useState(null);
   const [error, setError] = useState(null);
 
-  const hardcodedId = "67d9acf452f588f77d3d63f9"; // Hardcoded ID for testing
+  const user = getUser();
+  const userId = user?.providerID;
 
   useEffect(() => {
     const fetchPortfolio = async () => {
+      if (!userId) {
+        setError("User not found.");
+        return;
+      }
+
       try {
-        const response = await axios.get(`http://localhost:5050/api/portfolio/${hardcodedId}`);
-        console.log("Fetched Portfolio:", response.data);
+        const response = await axios.get(`http://localhost:5050/api/portfolio/${userId}`);
         setPortfolio(response.data);
       } catch (error) {
         console.error("Error fetching portfolio:", error);
@@ -21,7 +27,7 @@ const PortfolioDisplay = () => {
     };
 
     fetchPortfolio();
-  }, []);
+  }, [userId]);
 
   return (
     <div>
@@ -30,7 +36,7 @@ const PortfolioDisplay = () => {
         <p className="text-red-500">{error}</p>
       ) : portfolio ? (
         <PortfolioItem
-          key={hardcodedId}
+          key={userId}
           Type={portfolio.Type || "No Type"}
           Description={portfolio.Description || "No Description"}
           PastWorkMedia={portfolio.PastWorkMedia || []}

@@ -1,18 +1,21 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { isLoggedIn } from "../utils/auth";
+import { isLoggedIn, saveUser } from "../utils/auth";
 import Navbar from "../components/Navbar";
+import { jwtDecode } from "jwt-decode";
+
 
 function Login() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ username: "", password: "" });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
 
-  // Redirect if already logged in
-  if (isLoggedIn()) {
-    navigate("/dashboard");
-  }
+    // ✅ Redirect in useEffect
+    useEffect(() => {
+      if (isLoggedIn()) navigate("/dashboard");
+    }, []);
+  
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -27,7 +30,7 @@ function Login() {
     setMessage(null);
 
     try {
-      const res = await fetch("http://localhost:5050/api/register/login", {
+      const res = await fetch("http://localhost:5050/api/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -36,11 +39,17 @@ function Login() {
       const data = await res.json();
 
       if (res.ok) {
+        
         localStorage.setItem("token", data.token);
+
+        const userInfo = jwtDecode(data.token);
+        saveUser(userInfo);
+
         setMessage("✅ Login successful! Redirecting...");
         setTimeout(() => navigate("/dashboard"), 1500);
+        //Decode and save user info
       } else {
-        setError(data || "Invalid credentials");
+        setError(data.error || "Invalid credentials");
       }
     } catch (err) {
       setError("Server error. Please try again.");
@@ -58,10 +67,10 @@ function Login() {
         <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
           <form onSubmit={handleLogin} className="space-y-4">
             <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={formData.username}
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
               onChange={handleChange}
               required
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
