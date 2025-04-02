@@ -1,0 +1,10 @@
+{
+  "FullName": "Jane Doe",
+  "EmailAddress": "jane@example.com",
+  "EventDetails": "Booking Elite Events Co. for a corporate gala in NYC.",
+  "Date": "2025-05-20T00:00:00.000Z",
+  "Location": "New York",
+  "Guests": 120,
+  "VendorID": 1001,
+  "Status": "pending"
+}
