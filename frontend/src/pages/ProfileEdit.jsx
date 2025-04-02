@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
+import { getUser } from "../utils/auth";
 import AvailabilityToggle from "../components/AvailabilityToggle"; // Adjust the path as needed
 
 const ProfileEdit = () => {
-  const userId = "67d9acf452f588f77d3d63f9";
+  const authUser = getUser();
+  const userId = authUser?.providerID;
+  const providerType = authUser?.providerType;
+
 
   const [formData, setFormData] = useState({
     Name: "",
@@ -17,8 +21,18 @@ const ProfileEdit = () => {
   });
 
   useEffect(() => {
+    if (!userId || !providerType) return;
+
+  const baseUrlMap = {
+    "Transportation Provider": "transportation-providers",
+    "Vendor": "vendors",
+    "Guest Speaker": "guest-speakers"
+  };
+
+  const route = baseUrlMap[providerType];
+  if (!route) return;
     axios
-      .get(`http://localhost:5050/api/transportation-providers/${userId}`)
+      .get(`http://localhost:5050/api/${route}/${userId}`)
       .then((res) => {
         const { Name, Email, Phone, isVerified, Portfolio } = res.data;
         setFormData({
@@ -34,13 +48,23 @@ const ProfileEdit = () => {
         });
       })
       .catch((err) => console.error("Fetch error:", err));
-  }, []);
+  }, [userId,providerType]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async () => {
+    if (!userId || !providerType) return;
+
+  const baseUrlMap = {
+    "Transportation Provider": "transportation-providers",
+    "Vendor": "vendors",
+    "Guest Speaker": "guest-speakers"
+  };
+
+  const route = baseUrlMap[providerType];
+  if (!route) return;
     try {
       const payload = {
         Name: formData.Name,
@@ -54,7 +78,7 @@ const ProfileEdit = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:5050/api/transportation-providers/${userId}`,
+        `http://localhost:5050/api/${route}/${userId}`,
         payload
       );
       console.log("Profile updated:", response.data);
