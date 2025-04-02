@@ -7,50 +7,59 @@ const connectDB = require('./config/db');
 
 const app = express();
 
-// Connect Database
-connectDB();
+// Connect DB (optional skip during test)
+if (process.env.NODE_ENV !== 'test') {
+  connectDB();
+}
 
 // Middleware
 app.use(express.json());
 app.use(cors());
-
-//Serve static files (for accessing uploaded files)
 app.use("/uploads", express.static('uploads'));
 
-//Setup Multer Storage for File Uploads
+// Multer setup
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Save files in "uploads" folder
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Rename file with timestamp
-  },
+  destination: (req, file, cb) => cb(null, "uploads/"),
+  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
 });
-
 const upload = multer({ storage });
 
-// Upload Route
+// Upload route
 app.post("/api/upload", upload.single("media"), (req, res) => {
   if (!req.file) return res.status(400).json({ msg: "No file uploaded" });
   res.json({ filePath: `/uploads/${req.file.filename}` });
 });
 
-// Portfolio Routes
+// Route imports
 const guestSpeakerRoutes = require('./routes/GuestSpeakerRoutes');
-const vendorRoutes = require('./routes/VendorRoutes');
+const vendorRoutes = require('./routes/vendorRoutes');
 const transportationProviderRoutes = require('./routes/transportationProviderRoutes');
 const portfolioRoutes = require('./routes/PortfolioRoutes');
-const OrganizationRoutes = require('./routes/OrganizationRoutes');
+const organizationRoutes = require('./routes/OrganizationRoutes');
 
-// Use Routes
+// Add your new routes here 👇
+const bookingRoutes = require('./routes/booking');
+const registerRoutes = require('./routes/register'); //New
+
+
+// Route usage
 app.use('/api/guest-speakers', guestSpeakerRoutes);
 app.use('/api/vendors', vendorRoutes);
 app.use('/api/transportation-providers', transportationProviderRoutes);
 app.use('/api/portfolio', portfolioRoutes);
-app.use('/api/organization', OrganizationRoutes);
+app.use('/api/organization', organizationRoutes);
 
-// Server Start
-const PORT = process.env.PORT || 5050;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});
+// Register new routes here 👇
+app.use('/api/booking', bookingRoutes);
+app.use('/api/register', registerRoutes); // New
+
+// Export app for testing
+module.exports = app;
+
+// Start server only if not testing
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 5050;
+  app.listen(PORT, () => {
+    console.log(`✅ Server running on port ${PORT}`);
+  });
+}

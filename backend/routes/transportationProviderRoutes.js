@@ -3,6 +3,34 @@ const router = express.Router();
 const TransportationProvider = require('../models/TransportationProvider');
 
 // ✅ALL GET REQUESTS✅
+// ✅ GET provider by email (NEW route)
+router.get('/by-email/:email', async (req, res) => {
+  console.log("Incoming email param:", req.params.email);
+
+  try {
+    const all = await TransportationProvider.find(); // 👈 ADD HERE
+    console.log("📦 All provider emails:", all.map(p => p.Email)); // 👈 AND HERE
+
+    const incomingEmail = req.params.email.trim().toLowerCase();
+    const provider = await TransportationProvider.findOne({
+      Email: { $regex: new RegExp(`^${incomingEmail}$`, 'i') } // case-insensitive match
+    });
+    
+
+    if (!provider) {
+      console.log("❌ Provider not found with email:", req.params.email);
+      return res.status(404).json({ msg: 'Provider not found' });
+    }
+
+    console.log("✅ Found provider:", provider.Email);
+    res.json(provider);
+  } catch (error) {
+    console.error('Get by Email Error:', error);
+    res.status(500).json({ msg: 'Server Error' });
+  }
+});
+
+
 // ✅ GET all transportation provider portfolios
 router.get('/', async (req, res) => {
   try {
