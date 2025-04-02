@@ -40,6 +40,7 @@ const organizationRoutes = require('./routes/OrganizationRoutes');
 // Add your new routes here 👇
 const bookingRoutes = require('./routes/booking');
 const registerRoutes = require('./routes/register'); //New
+const bookingStatusRoutes = require('./routes/bookingStatusRoutes');
 
 
 // Route usage
@@ -52,6 +53,7 @@ app.use('/api/organization', organizationRoutes);
 // Register new routes here 👇
 app.use('/api/booking', bookingRoutes);
 app.use('/api/register', registerRoutes); // New
+app.use('/api/booking', bookingStatusRoutes);
 
 // Export app for testing
 module.exports = app;

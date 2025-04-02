@@ -43,16 +43,25 @@ const Booking = () => {
 
   const handleFilter = async (status) => {
     setFilter(status);
-    setCurrentPage(1); // reset page
-    const sortKey = getSortKey(status);
+    setCurrentPage(1); 
+  
+    // Filtering Data
     try {
-      const res = await fetch(`/api/booking/fetch?sortBy=${sortKey}`);
+      const res = await fetch(`/api/booking/fetch?sortBy=status`);
       const data = await res.json();
-      setVendors(data);
+  
+      let filteredData = data;
+  
+      if (status !== 'All') {
+        filteredData = data.filter(b => b.status.toLowerCase() === status.toLowerCase());
+      }
+  
+      setVendors(filteredData);
     } catch (err) {
       console.error('Error fetching filtered bookings:', err);
     }
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -84,7 +93,7 @@ const Booking = () => {
       });
 
       if (res.ok) {
-        setVendors((prev) => prev.map((v) => (v._id === id ? { ...v, status: newStatus } : v)));
+        handleFilter(filter); 
       }
     } catch (err) {
       console.error('Error updating status:', err);
@@ -127,6 +136,12 @@ const Booking = () => {
             </button>
             <button
               className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+              onClick={() => updateStatus(vendor._id, 'pending')}
+            >
+              Pending 
+            </button>
+            <button 
+              className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-gray-700"
               onClick={() => handleBookNowFromVendor(vendor)}
             >
               Book Now
