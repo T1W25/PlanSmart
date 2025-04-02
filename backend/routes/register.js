@@ -1,3 +1,4 @@
+
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
@@ -67,7 +68,6 @@ router.post("/create", async (req, res) => {
     res.status(500).json({ error: "Failed to register user and provider" });
   }
 });
-
 
 
 // Login route

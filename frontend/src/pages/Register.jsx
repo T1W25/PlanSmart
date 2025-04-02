@@ -29,7 +29,6 @@ function Register() {
     }));
   };
 
-
   const handleRegister = async (e) => {
     e.preventDefault();
     setError(null);
