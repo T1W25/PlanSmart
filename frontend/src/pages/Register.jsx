@@ -2,15 +2,26 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
+import { useEffect } from "react";
+import { isLoggedIn } from "../utils/auth"; // make sure this is imported
+
 function Register() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
+    providerType: ""
   });
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
+
+  // ⬇️ ADD THIS useEffect to redirect logged-in users
+  useEffect(() => {
+    if (isLoggedIn()) {
+      navigate("/dashboard");
+    }
+  }, []);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -32,8 +43,10 @@ function Register() {
       });
 
       if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem("token", data.token); // Save the token
         setMessage("✅ Registered successfully! Redirecting...");
-        setTimeout(() => navigate("/dashboard"), 2000); // 👈 redirect to dashboard
+        setTimeout(() => navigate("/dashboard"), 2000);
       } else {
         const data = await res.json();
         setError(data.error || "Something went wrong");
@@ -64,6 +77,12 @@ function Register() {
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
+          <select required name="providerType" value={formData.providerType} onChange={handleChange} className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white text-gray-700">
+            <option value="" disabled>Select your service type</option>
+            <option value="Transportation Provider">Transportation Provider</option>
+            <option value="Vendor">Vendor</option>
+            <option value="Guest Speaker">Guest Speaker</option>
+          </select>
             <input
               type="email"
               name="email"
