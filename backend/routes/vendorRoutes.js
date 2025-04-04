@@ -4,13 +4,14 @@ const Vendor = require('../models/Vendor');
 
 router.get("/", async (req, res) => {
   try {
-    const Vendors = await Vendor.find();
+    const Vendors = await Vendor.find().sort({ isAvailable: -1, isVerified: -1 });
     res.json(Vendors);
   } catch (error) {
     console.error("Fetch Vendor Error:", error);
     res.status(500).json({ msg: "Server Error" });
   }
 });
+
 
 // ✅ GET all vendor portfolios with prioritization for verified vendors and search
 router.get('/search', async (req, res) => {

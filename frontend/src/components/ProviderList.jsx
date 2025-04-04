@@ -12,6 +12,7 @@ const ProviderList = ({ providers }) => {
       {providers.map((provider) => (
         <ProviderCard
           key={provider._id}
+          id={provider._id}
           name={provider.Name}
           email={provider.Email}
           phone={provider.Phone}

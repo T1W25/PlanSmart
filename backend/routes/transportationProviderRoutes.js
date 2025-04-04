@@ -34,11 +34,54 @@ router.get('/by-email/:email', async (req, res) => {
 // ✅ GET all transportation provider portfolios
 router.get('/', async (req, res) => {
   try {
-    const portfolios = await TransportationProvider.find();
+    const portfolios = await TransportationProvider.find().sort({ isAvailable: -1, isVerified: -1 });;
     res.json(portfolios);
   } catch (error) {
     console.error('Transportation Provider Fetch Error:', error);
     res.status(500).json({ msg: 'Server Error' });
+  }
+});
+
+router.get("/search", async (req, res) => {
+  try {
+    const { searchTerm, verified, page = 1, limit = 10 } = req.query;
+    let searchQuery = {};
+
+    if (searchTerm) {
+      searchQuery = {
+        $or: [
+          { Name: { $regex: searchTerm, $options: "i" } },
+          { Email: { $regex: searchTerm, $options: "i" } },
+        ],
+      };
+    }
+
+    if (verified) {
+      searchQuery.isVerified = true;
+    }
+
+    const skip = (page - 1) * limit;
+
+    const transportProviders = await TransportationProvider.find(searchQuery)
+      .sort({ isVerified: -1, rating: -1 })
+      .skip(skip)
+      .limit(Number(limit))
+      .exec();
+
+    const total = await TransportationProvider.countDocuments(searchQuery);
+
+    res.json({
+      transportProviders,
+      pagination: {
+        total,
+        totalPages: Math.ceil(total / limit),
+        currentPage: Number(page),
+        limit: Number(limit),
+      },
+    });
+  } catch (error) {
+    console.error("TransportProvider Search Error:", error);
+    res.status(500).json({ msg: "Server Error" });
   }
 });
 

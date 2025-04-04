@@ -38,7 +38,7 @@ const ViewProviders = () => {
         <div className="flex space-x-4 mb-6 border-b pb-2">
           <button
             onClick={() => setActiveTab("vendors")}
-            className={`px-4 py-2 rounded-t-md ${
+            className={`px-4 py-2 cursor-pointer rounded-t-md ${
               activeTab === "vendors"
                 ? "bg-black text-white"
                 : "bg-gray-100 text-gray-700"
@@ -48,7 +48,7 @@ const ViewProviders = () => {
           </button>
           <button
             onClick={() => setActiveTab("transport")}
-            className={`px-4 py-2 rounded-t-md ${
+            className={`px-4 py-2 cursor-pointer rounded-t-md ${
               activeTab === "transport"
                 ? "bg-black text-white"
                 : "bg-gray-100 text-gray-700"
@@ -58,7 +58,7 @@ const ViewProviders = () => {
           </button>
           <button
             onClick={() => setActiveTab("speakers")}
-            className={`px-4 py-2 rounded-t-md ${
+            className={`px-4 py-2 cursor-pointer rounded-t-md ${
               activeTab === "speakers"
                 ? "bg-black text-white"
                 : "bg-gray-100 text-gray-700"

@@ -14,14 +14,12 @@ import OrganizationDashboard from './pages/Organization/OrganizationDashboard';
 import OrgRegister from './pages/OrgRegister';
 import Unauthorized from './pages/Unauthorized';
 import ViewProviders from './pages/Organization/ViewProviders';
+import AddReview from './pages/Organization/AddReview';
+import CreateEvent from './pages/Organization/CreateEvent';
+import Event from './pages/Organization/Events'
 
 function App() {
   return (
-
-
-    
-
-    
     <Router>
       <Routes>
       <Route path="/" element={<RedirectHome />} />
@@ -48,7 +46,16 @@ function App() {
           path="/viewproviders"
           element={
             <ProtectedRoute allowedRoles={["organization"]}>
-              <ViewProviders />
+              <ViewProviders/>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/addreview/:id"
+          element={
+            <ProtectedRoute allowedRoles={["organization"]}>
+              <AddReview/>
             </ProtectedRoute>
           }
         />
@@ -61,6 +68,25 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/create-event"
+          element={
+            <ProtectedRoute allowedRoles={["organization"]}>
+              <CreateEvent />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/event"
+          element={
+            <ProtectedRoute allowedRoles={["organization"]}>
+              <Event />
+            </ProtectedRoute>
+          }
+        />
+
         {/* The rest (not protected) */}
         <Route path="/login" element={<Login />} />
         <Route path="/pages/profileedit" element={<ProfileEdit />} />
@@ -70,6 +96,7 @@ function App() {
         <Route path="/pages/orglogin" element={<OrgLogin />} />
         <Route path="/pages/orgregister" element={<OrgRegister />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/viewproviders" element={<ViewProviders />} />
       </Routes>
     </Router>
   );

@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { Organization, Spending } = require("../models/Organization"); // Updated import
+const { Organization, Spending } = require("../models/Organization");
 const {
   getOrganizationWithSpending,
   addSpendingRecord
 } = require("../controllers/organizationController"); // Import the controller functions
+const Event = require("../models/Events");
+
 
 
 // ✅ GET all organizations
@@ -94,6 +96,69 @@ router.get("/:orgId/spending", async (req, res) => {
   } catch (error) {
     console.error("Error fetching organization:", error);
     res.status(500).json({ message: "Error fetching organization" });
+  }
+});
+
+router.get("/events/:orgId", async (req, res) => {
+  try {
+    const events = await Event.find({ organizationId: req.params.orgId })
+      .sort({ createdAt: -1 }); // Sort by newest
+
+    if (!events.length) {
+      return res.status(404).json({ msg: "No events found for this organization." });
+    }
+
+    res.json(events);
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
+
+router.post("/events", async (req, res) => {
+  try {
+    const {
+      eventName,
+      eventDescription,
+      date,
+      numberOfGuests,
+      location,
+      rate,
+      organizationId,
+      organizationName,
+      providers,
+    } = req.body;
+
+    // Validate that at least one provider exists
+    if (!Array.isArray(providers) || providers.length === 0) {
+      return res.status(400).json({ msg: "At least one provider is required." });
+    }
+
+    // Optional: validate fields inside the provider
+    for (const provider of providers) {
+      if (!provider.providerID || !provider.providerType || !provider.providerName) {
+        return res.status(400).json({ msg: "Invalid provider information." });
+      }
+    }
+
+    const newEvent = new Event({
+      eventName,
+      eventDescription,
+      date,
+      numberOfGuests,
+      location,
+      rate,
+      organizationId,
+      organizationName,
+      providers, // just use the full array as received
+    });
+
+    await newEvent.save();
+    res.status(201).json({ msg: "Event created successfully", event: newEvent });
+  } catch (error) {
+    console.error("Event creation error:", error);
+    res.status(500).json({ msg: "Server error during event creation" });
   }
 });
 
