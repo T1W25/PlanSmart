@@ -18,8 +18,6 @@ const GuestSpeakerSchema = new mongoose.Schema({
 
 // Pre-save hook
 GuestSpeakerSchema.pre("save", async function (next) {
-  // Hash password
-
   // Calculate average rating
   if (this.Reviews.length > 0) {
     const sum = this.Reviews.reduce((acc, review) => acc + (review.rating || 0), 0);

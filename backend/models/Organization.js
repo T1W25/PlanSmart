@@ -28,6 +28,7 @@ const OrganizationSchema = new mongoose.Schema(
   {
     Name: { type: String, required: true, trim: true },
     Description: { type: String, default: "" },
+    Password: { type: String, required: true },
     Email: { type: String, required: true, unique: true, lowercase: true },
     Industry: { type: String, default: "" },
     Address: { type: String, default: "" },

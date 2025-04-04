@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const TransportationProvider = require("../models/TransportationProvider");
 const Vendor = require("../models/Vendor");
 const GuestSpeaker = require("../models/GuestSpeaker");
+const { Organization } = require("../models/Organization");
 
 //Mapped providerType to its respective Mongoose model
 const modelMap = {
@@ -46,6 +47,7 @@ router.post("/create", async (req, res) => {
         providerType,
         email: email,
         name: newProvider.Name,
+        role: "provider",
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
@@ -69,5 +71,51 @@ router.post("/create", async (req, res) => {
     res.status(500).json({ error: "Failed to register user and provider" });
   }
 });
+
+router.post("/createorg", async (req, res) => {
+  const { username, email, password } = req.body;
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newOrg = new Organization({
+      Name: username,
+      Email: email,
+      Password: hashedPassword,
+    });
+
+    await newOrg.save();
+
+    const token = jwt.sign(
+      {
+        orgID: newOrg._id,
+        email: newOrg.Email,
+        name: newOrg.Name,
+        role: "organization",
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.status(201).json({
+      message: `${newOrg.Name} registered successfully as an Organization`,
+      token,
+      orgID: newOrg._id,
+      name: newOrg.Name,
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      const duplicateKey = Object.keys(error.keyPattern)[0];
+      return res.status(400).json({
+        error: `Duplicate ${duplicateKey}. That ${duplicateKey} is already taken.`,
+      });
+    }
+
+    console.error("❌ Organization registration error:", error.message);
+    res.status(500).json({ error: "Failed to register organization" });
+  }
+});
+
+//Organization register route
 
 module.exports = router;
