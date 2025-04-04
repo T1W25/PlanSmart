@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const Vendor = require("../models/Vendor");
 const GuestSpeaker = require("../models/GuestSpeaker");
 const TransportationProvider = require("../models/TransportationProvider");
+const { Organization } = require("../models/Organization");
 
 router.post("/", async (req, res) => {
   const { email, password } = req.body;
@@ -33,6 +34,7 @@ router.post("/", async (req, res) => {
         providerType: provider.ProviderType,
         email: provider.Email,
         name: provider.Name,
+        role: "provider"
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
@@ -67,7 +69,8 @@ router.post("/org", async (req, res) => {
           organizationID: organization._id,
           email: organization.Email,
           name: organization.Name,
-          type: "Organization"
+          type: "Organization",
+          role: "organization"
         },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
