@@ -1,21 +1,24 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { isLoggedIn, saveUser } from "../utils/auth";
 import Navbar from "../components/Navbar";
-import { jwtDecode } from "jwt-decode";
+import { isLoggedIn } from "../utils/auth";
 
-
-function Login() {
+function OrgRegister() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    role: "organization", // ⬅️ Important for backend identification
+  });
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
 
-    // ✅ Redirect in useEffect
-    useEffect(() => {
-      if (isLoggedIn()) navigate("/dashboard");
-    }, []);
-  
+  useEffect(() => {
+    if (isLoggedIn()) {
+      navigate("/orgdashboard");
+    }
+  }, []);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -24,32 +27,26 @@ function Login() {
     }));
   };
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setError(null);
     setMessage(null);
 
     try {
-      const res = await fetch("http://localhost:5050/api/signin", {
+      const res = await fetch("http://localhost:5050/api/register/createorg", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      const data = await res.json();
-
       if (res.ok) {
-        
+        const data = await res.json();
         localStorage.setItem("token", data.token);
-
-        const userInfo = jwtDecode(data.token);
-        saveUser(userInfo);
-
-        setMessage("✅ Login successful! Redirecting...");
-        setTimeout(() => navigate("/dashboard"), 1500);
-        //Decode and save user info
+        setMessage("✅ Organization registered successfully! Redirecting...");
+        setTimeout(() => navigate("/orgdashboard"), 2000);
       } else {
-        setError(data.error || "Invalid credentials");
+        const data = await res.json();
+        setError(data.error || "Something went wrong");
       }
     } catch (err) {
       setError("Server error. Please try again.");
@@ -61,19 +58,28 @@ function Login() {
       <Navbar />
       <div className="flex flex-col items-center justify-center pt-20 px-4">
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Login
+          Register Your Organization
         </h1>
 
         <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleRegister} className="space-y-4">
+            <input
+              type="text"
+              name="username"
+              placeholder="Organization Name"
+              value={formData.username}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
             <input
               type="email"
               name="email"
-              placeholder="Email"
+              placeholder="Organization Email"
               value={formData.email}
               onChange={handleChange}
-              required
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
             <input
               type="password"
@@ -81,8 +87,8 @@ function Login() {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              required
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
 
             {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -92,27 +98,17 @@ function Login() {
               type="submit"
               className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200"
             >
-              Login
+              Register
             </button>
           </form>
 
           <div className="mt-4 text-center text-sm text-gray-600">
-           To Sign in as an Organization{" "}
+            Already registered?{" "}
             <button
               className="text-blue-600 hover:underline"
               onClick={() => navigate("/pages/orglogin")}
             >
-              Click here
-            </button>
-          </div>
-
-          <div className="mt-4 text-center text-sm text-gray-600">
-            Don’t have an account?{" "}
-            <button
-              className="text-blue-600 hover:underline"
-              onClick={() => navigate("/register")}
-            >
-              Register here
+              Login here
             </button>
           </div>
         </div>
@@ -121,4 +117,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default OrgRegister;

@@ -45,4 +45,39 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.post("/org", async (req, res) => {
+    const { email, password } = req.body;
+  
+    const searchQuery = { Email: { $regex: `^${email}$`, $options: 'i' } };
+  
+    try {
+      const organization = await Organization.findOne(searchQuery);
+  
+      if (!organization) {
+        return res.status(400).json({ error: "Invalid email or password" });
+      }
+  
+      const isMatch = await bcrypt.compare(password, organization.Password);
+      if (!isMatch) {
+        return res.status(400).json({ error: "Invalid email or password" });
+      }
+  
+      const token = jwt.sign(
+        {
+          organizationID: organization._id,
+          email: organization.Email,
+          name: organization.Name,
+          type: "Organization"
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+  
+      res.json({ token, message: "Organization login successful" });
+    } catch (error) {
+      console.error("Org Login Error:", error);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
 module.exports = router;

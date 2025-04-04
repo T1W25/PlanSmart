@@ -14,9 +14,9 @@ export function isLoggedIn() {
   if (!token) return false;
 
   try {
-    const { exp } = jwtDecode(token);
+    const decoded = jwtDecode(token);
     const now = Date.now() / 1000; // in seconds
-    return exp > now; // true if not expired
+    return decoded.exp > now && !!decoded.role; // true if not expired
   } catch {
     return false; // token is invalid or broken
   }

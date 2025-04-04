@@ -2,8 +2,18 @@ const express = require('express');
 const router = express.Router();
 const Vendor = require('../models/Vendor');
 
+router.get("/", async (req, res) => {
+  try {
+    const Vendors = await Vendor.find();
+    res.json(Vendors);
+  } catch (error) {
+    console.error("Fetch Vendor Error:", error);
+    res.status(500).json({ msg: "Server Error" });
+  }
+});
+
 // ✅ GET all vendor portfolios with prioritization for verified vendors and search
-router.get('/', async (req, res) => {
+router.get('/search', async (req, res) => {
   try {
     // Extract query parameters
     const { searchTerm, verified, page = 1, limit = 10 } = req.query; // Defaults: page 1, limit 10

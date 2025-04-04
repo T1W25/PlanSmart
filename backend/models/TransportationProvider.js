@@ -14,7 +14,18 @@ const TransportationProviderSchema = new mongoose.Schema({
   Portfolio: { type: PortfolioSchema },
   rating: { type: Number, default: 0, min: 0, max: 5 },
   ProfilePhoto: { type: String },
-  Reviews: [ClientReviewSchema]
+  Reviews: [ClientReviewSchema],
+  Events: [
+    {
+      eventId: { type: mongoose.Schema.Types.ObjectId, ref: "Event" },
+      status: {
+        type: String,
+        enum: ["accepted", "declined", "pending"],
+        default: "pending"
+      },
+      respondedAt: { type: Date, default: Date.now }
+    }
+  ]
 });
 
 // Pre-save hook
