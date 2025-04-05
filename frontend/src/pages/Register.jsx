@@ -11,6 +11,7 @@ function Register() {
     username: "",
     email: "",
     password: "",
+    providerType: ""
   });
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
@@ -76,6 +77,12 @@ function Register() {
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
+          <select required name="providerType" value={formData.providerType} onChange={handleChange} className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white text-gray-700">
+            <option value="" disabled>Select your service type</option>
+            <option value="Transportation Provider">Transportation Provider</option>
+            <option value="Vendor">Vendor</option>
+            <option value="Guest Speaker">Guest Speaker</option>
+          </select>
             <input
               type="email"
               name="email"

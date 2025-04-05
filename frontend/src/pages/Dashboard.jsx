@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
 import ProfileCards from "../components/ProfileCards";
+import ReviewCards from "../components/ReviewCards";
 import PortfolioShowcase from "../components/PortfolioShowcase";
-
 import { getUser } from "../utils/auth";
 
 function Dashboard() {
@@ -13,17 +13,26 @@ function Dashboard() {
   const navigate = useNavigate();
   const authUser = getUser(); // ⬅️ Get user info from token
 
-  // ✅ Replace this hardcoded userId with the actual one from token, if possible
-  const userId = authUser?.userID || "67d9acf452f588f77d3d63f9";
+  const providerType = authUser?.providerType;
+  const email = authUser?.email;
 
   useEffect(() => {
-    if (!authUser?.email) return;
+    if (!providerType || !email) return;
+
+    const endpointMap = {
+      "Transportation Provider": "transportation-providers",
+      "Vendor": "vendors",
+      "Guest Speaker": "guest-speakers",
+    };
   
+    const route = endpointMap[providerType];
+    if (!route) return;
+
     axios
-      .get(`http://localhost:5050/api/transportation-providers/by-email/${authUser.email}`)
+      .get(`http://localhost:5050/api/${route}/${authUser.providerID}`)
       .then((response) => setUserData(response.data))
       .catch((error) => console.error("Error fetching provider:", error));
-  }, [authUser?.email]);
+  }, [providerType, email]);
   
 
   return (
@@ -34,7 +43,7 @@ function Dashboard() {
       <div className="text-center text-gray-700">
         {authUser ? (
           <p className="text-md">
-            Logged in as <strong>{authUser.username}</strong> ({authUser.email})
+            Logged in as <strong>{authUser.name}</strong> ({authUser.email})
           </p>
         ) : (
           <p className="text-red-500">User info not found</p>
@@ -57,23 +66,25 @@ function Dashboard() {
       </div>
 
       {/* Portfolio Showcase Section */}
+      
       {userData && (
         <PortfolioShowcase
-          portfolioData={userData.Portfolio}
+          portfolioData={userData?.Portfolio || {}}
           showCase1={
-            userData.Portfolio.PastWorkMedia[
+            userData?.Portfolio?.PastWorkMedia?.[
               userData.Portfolio.PastWorkMedia.length - 1
-            ] || "No Media Available"
+            ] || ""
           }
           showCase2={
-            userData.Portfolio.PastWorkMedia[
+            userData?.Portfolio?.PastWorkMedia?.[
               userData.Portfolio.PastWorkMedia.length - 2
-            ] || "No Media Available"
+            ] || ""
           }
           onEditClick={() => navigate("/pages/portfolioeditor")}
           onViewAllClick={() => navigate("/pages/portfoliodisplay")}
         />
       )}
+        <ReviewCards/>
     </div>
   );
 }

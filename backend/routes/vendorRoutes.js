@@ -2,8 +2,18 @@ const express = require('express');
 const router = express.Router();
 const Vendor = require('../models/Vendor');
 
+router.get("/", async (req, res) => {
+  try {
+    const Vendors = await Vendor.find();
+    res.json(Vendors);
+  } catch (error) {
+    console.error("Fetch Vendor Error:", error);
+    res.status(500).json({ msg: "Server Error" });
+  }
+});
+
 // ✅ GET all vendor portfolios with prioritization for verified vendors and search
-router.get('/', async (req, res) => {
+router.get('/search', async (req, res) => {
   try {
     // Extract query parameters
     const { searchTerm, verified, page = 1, limit = 10 } = req.query; // Defaults: page 1, limit 10
@@ -50,6 +60,20 @@ router.get('/', async (req, res) => {
     });
   } catch (error) {
     console.error('Vendor Fetch Error:', error);
+    res.status(500).json({ msg: 'Server Error' });
+  }
+});
+
+
+router.get('/:id', async (req, res) => {
+  try {
+    const provider = await Vendor.findById(req.params.id);
+    if (!provider) {
+      return res.status(404).json({ msg: 'Provider not found' });
+    }
+    res.json(provider);
+  } catch (error) {
+    console.error('Get by ID Error:', error);
     res.status(500).json({ msg: 'Server Error' });
   }
 });

@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 import { jwtDecode } from "jwt-decode";
 
 
-function Login() {
+function OrgLogin() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
@@ -13,7 +13,7 @@ function Login() {
 
     // ✅ Redirect in useEffect
     useEffect(() => {
-      if (isLoggedIn()) navigate("/dashboard");
+      if (isLoggedIn()) navigate("/orgdashboard");
     }, []);
   
 
@@ -30,7 +30,7 @@ function Login() {
     setMessage(null);
 
     try {
-      const res = await fetch("http://localhost:5050/api/signin", {
+      const res = await fetch("http://localhost:5050/api/signin/org", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -46,7 +46,7 @@ function Login() {
         saveUser(userInfo);
 
         setMessage("✅ Login successful! Redirecting...");
-        setTimeout(() => navigate("/dashboard"), 1500);
+        setTimeout(() => navigate("/orgdashboard"), 1500);
         //Decode and save user info
       } else {
         setError(data.error || "Invalid credentials");
@@ -61,7 +61,7 @@ function Login() {
       <Navbar />
       <div className="flex flex-col items-center justify-center pt-20 px-4">
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Login
+          Event Planner Login
         </h1>
 
         <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
@@ -97,22 +97,21 @@ function Login() {
           </form>
 
           <div className="mt-4 text-center text-sm text-gray-600">
-           To Sign in as an Organization{" "}
-            <button
-              className="text-blue-600 hover:underline"
-              onClick={() => navigate("/pages/orglogin")}
-            >
-              Click here
-            </button>
-          </div>
-
-          <div className="mt-4 text-center text-sm text-gray-600">
             Don’t have an account?{" "}
             <button
               className="text-blue-600 hover:underline"
-              onClick={() => navigate("/register")}
+              onClick={() => navigate("/pages/orgregister")}
             >
               Register here
+            </button>
+          </div>
+          <div className="mt-4 text-center text-sm text-gray-600">
+            To login as a provider click {" "}
+            <button
+              className="text-blue-600 hover:underline"
+              onClick={() => navigate("/login")}
+            >
+             here
             </button>
           </div>
         </div>
@@ -121,4 +120,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default OrgLogin;

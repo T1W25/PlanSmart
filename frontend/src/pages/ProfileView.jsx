@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
+import { getUser } from "../utils/auth";
+
 
 const ProfileView = () => {
-  const userId = "67d9acf452f588f77d3d63f9";
+  const authUser = getUser();
+  const userId = authUser?.providerID;
+  const providerType = authUser?.providerType;
 
   const [userData, setUserData] = useState({
     Name: "",
@@ -14,8 +18,19 @@ const ProfileView = () => {
   });
 
   useEffect(() => {
+    if (!userId || !providerType) return;
+
+    const baseUrlMap = {
+      "Transportation Provider": "transportation-providers",
+      "Vendor": "vendors",
+      "Guest Speaker": "guest-speakers"
+    };
+  
+    const route = baseUrlMap[providerType];
+    if (!route) return;
+
     axios
-      .get(`http://localhost:5050/api/transportation-providers/${userId}`)
+      .get(`http://localhost:5050/api/${route}/${userId}`)
       .then((res) => {
         const { Name, Email, Phone, isVerified, Portfolio } = res.data;
         setUserData({
@@ -27,7 +42,7 @@ const ProfileView = () => {
         });
       })
       .catch((err) => console.error("Fetch error:", err));
-  }, []);
+  }, [userId, providerType]);
 
   return (
     <>

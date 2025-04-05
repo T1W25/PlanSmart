@@ -1,60 +1,63 @@
-
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const User = require("../models/register");
 const TransportationProvider = require("../models/TransportationProvider");
+const Vendor = require("../models/Vendor");
+const GuestSpeaker = require("../models/GuestSpeaker");
+const { Organization } = require("../models/Organization");
+
+//Mapped providerType to its respective Mongoose model
+const modelMap = {
+  "Transportation Provider": TransportationProvider,
+  "Vendor": Vendor,
+  "Guest Speaker": GuestSpeaker,
+};
 
 // Register route
 router.post("/create", async (req, res) => {
-  const { username, password, email } = req.body;
+  const { username, password, email, providerType } = req.body;
 
   try {
+    // 1. Validate providerType
+    const Model = modelMap[providerType];
+    if (!Model) {
+      return res.status(400).json({ error: "Invalid provider type" });
+    }
+
     // 1. Hash password for User model
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // 2. Create User (auth record)
-    const newUser = new User({
-      username,
-      password: hashedPassword,
-      email,
-    });
-    console.log("Registering user:", username, email);
-    await newUser.save();
-    console.log("✅ User saved");
-
-    // 3. Create TransportationProvider (profile record)
-    const newProvider = new TransportationProvider({
+    const newProvider = new Model({
       Name: username,
       Email: email,
-      Password: password, // will be hashed by schema pre-save hook
-      Phone: "000-000-0000", // ❗ temporary placeholder — update later
-      ProviderType: "Transportation Provider",
-      Portfolio: { PastWorkMedia: [] },
-      Reviews: [],
-      ProfilePhoto: "",
+      Password: hashedPassword,
+      ProviderType: providerType,
     });
 
     await newProvider.save();
-    console.log("✅ Provider saved");
+    console.log("✅ User saved");
+
     // 4. Create JWT token
     const token = jwt.sign(
       {
-        userID: newUser._id,
-        username: newUser.username,
-        email: newUser.email,
         providerID: newProvider._id,
+        providerType,
+        email: email,
+        name: newProvider.Name,
+        role: "provider",
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
     res.status(201).json({
-      message: "User and provider created",
+      message: `${newProvider.Name} registered successfully`,
       token,
-      userID: newUser._id,
+      providerID: newProvider._id,
+      name: newProvider.Name,
     });
   } catch (error) {
     if (error.code === 11000) {
@@ -69,24 +72,50 @@ router.post("/create", async (req, res) => {
   }
 });
 
+router.post("/createorg", async (req, res) => {
+  const { username, email, password } = req.body;
 
-// Login route
-router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-  const user = await User.findOne({ username });
-  if (!user) return res.status(400).json('Invalid credentials');
+    const newOrg = new Organization({
+      Name: username,
+      Email: email,
+      Password: hashedPassword,
+    });
 
-  const isValid = await bcrypt.compare(password, user.password);
-  if (!isValid) return res.status(400).json('Invalid credentials');
+    await newOrg.save();
 
-  const token = jwt.sign(
-    { userID: user._id, username: user.username, email: user.email },
-    process.env.JWT_SECRET,
-    { expiresIn: '1h' }
-  );
+    const token = jwt.sign(
+      {
+        orgID: newOrg._id,
+        email: newOrg.Email,
+        name: newOrg.Name,
+        role: "organization",
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
-  res.json({ token, userID: user._id });
+    res.status(201).json({
+      message: `${newOrg.Name} registered successfully as an Organization`,
+      token,
+      orgID: newOrg._id,
+      name: newOrg.Name,
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      const duplicateKey = Object.keys(error.keyPattern)[0];
+      return res.status(400).json({
+        error: `Duplicate ${duplicateKey}. That ${duplicateKey} is already taken.`,
+      });
+    }
+
+    console.error("❌ Organization registration error:", error.message);
+    res.status(500).json({ error: "Failed to register organization" });
+  }
 });
+
+//Organization register route
 
 module.exports = router;

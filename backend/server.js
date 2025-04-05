@@ -32,12 +32,24 @@ app.post("/api/upload", upload.single("media"), (req, res) => {
 
 // Route imports
 const guestSpeakerRoutes = require('./routes/GuestSpeakerRoutes');
-const vendorRoutes = require('./routes/vendorRoutes');
+const vendorRoutes = require('./routes/VendorRoutes');
 const transportationProviderRoutes = require('./routes/transportationProviderRoutes');
 const portfolioRoutes = require('./routes/PortfolioRoutes');
 const organizationRoutes = require('./routes/OrganizationRoutes');
+
+
+const reviewRoutes = require('./routes/reviewRoutes');
+
+
+// Add your new routes here 👇
 const bookingRoutes = require('./routes/booking');
-const registerRoutes = require('./routes/register');
+const registerRoutes = require('./routes/register'); //New
+
+const bookingStatusRoutes = require('./routes/bookingStatusRoutes');
+
+const signInRoutes = require('./routes/signIn');
+
+
 
 // API route usage
 app.use('/api/guest-speakers', guestSpeakerRoutes);
@@ -45,8 +57,18 @@ app.use('/api/vendors', vendorRoutes);
 app.use('/api/transportation-providers', transportationProviderRoutes);
 app.use('/api/portfolio', portfolioRoutes);
 app.use('/api/organization', organizationRoutes);
+
+
+app.use('/api/signin', signInRoutes);
+app.use('/api/reviews', reviewRoutes);
+
+
+// Register new routes here 👇
 app.use('/api/booking', bookingRoutes);
-app.use('/api/register', registerRoutes);
+app.use('/api/register', registerRoutes); // New
+app.use('/api/booking', bookingStatusRoutes);
+
+
 
 // ✅ Serve frontend in production
 const frontendPath = path.join(__dirname, '../frontend/dist');

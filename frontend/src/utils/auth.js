@@ -1,6 +1,10 @@
 // src/utils/auth.js
 import  { jwtDecode } from "jwt-decode";
 
+export function saveUser(user) {
+  localStorage.setItem("user", JSON.stringify(user));
+}
+
 export function getToken() {
   return localStorage.getItem("token");
 }
@@ -10,9 +14,9 @@ export function isLoggedIn() {
   if (!token) return false;
 
   try {
-    const { exp } = jwtDecode(token);
+    const decoded = jwtDecode(token);
     const now = Date.now() / 1000; // in seconds
-    return exp > now; // true if not expired
+    return decoded.exp > now && !!decoded.role; // true if not expired
   } catch {
     return false; // token is invalid or broken
   }
@@ -29,6 +33,7 @@ export function getUser() {
   }
 }
 
+
 export function logout() {
-  localStorage.removeItem("token");
+  return !!localStorage.getItem("token");
 }

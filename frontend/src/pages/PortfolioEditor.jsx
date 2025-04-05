@@ -1,15 +1,22 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { getUser } from "../utils/auth";
+import Navbar from "../components/Navbar";
 
-//using 67d9acf452f588f77d3d63f9 to test
-const PortfolioEditor = ({ modelId = "67d9acf452f588f77d3d63f9", initialPortfolio = null, entityType = "vendor" }) => {
+
+const PortfolioEditor = ({ initialPortfolio = null }) => {
+  const user = getUser();
+  const modelId = user?.providerID; // 👈 Dynamic user ID
+  const entityType = user?.providerType?.toLowerCase() || "vendor"; // 👈 Optional if needed later
+
   const [portfolio, setPortfolio] = useState(
     initialPortfolio || { Type: "", Description: "", PastWorkMedia: [], Awards: [] }
   );
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [awardInput, setAwardInput] = useState(""); // Track award input
+  const [awardInput, setAwardInput] = useState("");
+
 
   // Handle Input Changes
   const handleChange = (e) => {
@@ -84,8 +91,10 @@ const PortfolioEditor = ({ modelId = "67d9acf452f588f77d3d63f9", initialPortfoli
 
 
   return (
-    <div className="bg-white shadow-md p-6 rounded-md">
-      <h2 className="text-lg font-semibold mb-2">Edit Portfolio</h2>
+    <div className="bg-white shadow-md rounded-md">
+      <Navbar/>
+      <div className="p-6">
+      <h2 className="text-lg font-semibold pt-20 mb-2">Edit Portfolio</h2>
       <form onSubmit={handleSave} className="space-y-4">
 
         <input type="text" name="Type" value={portfolio.Type} placeholder="Type" className="w-full border p-2 rounded-md" onChange={handleChange} />
@@ -128,6 +137,7 @@ const PortfolioEditor = ({ modelId = "67d9acf452f588f77d3d63f9", initialPortfoli
           Update Portfolio
         </button>
       </form>
+    </div>
     </div>
   );
 };
