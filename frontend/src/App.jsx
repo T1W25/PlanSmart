@@ -9,6 +9,7 @@ import Booking from './pages/Booking';
 import Register from './pages/Register';
 import Login from './pages/Login'; // 👈 Import
 import ProtectedRoute from './components/ProtectedRoute'; // ⬅️ import this
+import Contact from './pages/Contact';
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
         <Route path="/pages/profileview" element={<ProfileView />} />
         <Route path="/pages/portfoliodisplay" element={<Portfolio />} />
         <Route path="/pages/portfolioeditor" element={<PortfolioEditor />} />
+        <Route path="/contact" element={<Contact/>} />
       </Routes>
     </Router>
   );
