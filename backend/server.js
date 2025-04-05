@@ -7,7 +7,7 @@ const connectDB = require('./config/db');
 
 const app = express();
 
-// Connect DB (optional skip during test)
+// Connect DB (skip during test)
 if (process.env.NODE_ENV !== 'test') {
   connectDB();
 }
@@ -36,6 +36,8 @@ const vendorRoutes = require('./routes/VendorRoutes');
 const transportationProviderRoutes = require('./routes/transportationProviderRoutes');
 const portfolioRoutes = require('./routes/PortfolioRoutes');
 const organizationRoutes = require('./routes/OrganizationRoutes');
+
+
 const reviewRoutes = require('./routes/reviewRoutes');
 
 
@@ -49,12 +51,14 @@ const signInRoutes = require('./routes/signIn');
 
 
 
-// Route usage
+// API route usage
 app.use('/api/guest-speakers', guestSpeakerRoutes);
 app.use('/api/vendors', vendorRoutes);
 app.use('/api/transportation-providers', transportationProviderRoutes);
 app.use('/api/portfolio', portfolioRoutes);
 app.use('/api/organization', organizationRoutes);
+
+
 app.use('/api/signin', signInRoutes);
 app.use('/api/reviews', reviewRoutes);
 
@@ -65,13 +69,21 @@ app.use('/api/register', registerRoutes); // New
 app.use('/api/booking', bookingStatusRoutes);
 
 
-// Export app for testing
-module.exports = app;
 
-// Start server only if not testing
+// ✅ Serve frontend in production
+const frontendPath = path.join(__dirname, '../frontend/dist');
+app.use(express.static(frontendPath));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'index.html'));
+});
+
+// Start server
+const PORT = process.env.PORT || 5050;
 if (process.env.NODE_ENV !== 'test') {
-  const PORT = process.env.PORT || 5050;
   app.listen(PORT, () => {
     console.log(`✅ Server running on port ${PORT}`);
   });
 }
+
+module.exports = app;
