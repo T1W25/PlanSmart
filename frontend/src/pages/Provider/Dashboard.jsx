@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import Navbar from "../components/Navbar";
-import ProfileCards from "../components/ProfileCards";
-import ReviewCards from "../components/ReviewCards";
-import PortfolioShowcase from "../components/PortfolioShowcase";
-import { getUser } from "../utils/auth";
+import Navbar from "../../components/Navbar";
+import ProfileCards from "../../components/providerComponents/ProfileCards";
+import ReviewCards from "../../components/providerComponents/ReviewCards";
+import PortfolioShowcase from "../../components/providerComponents/PortfolioShowcase";
+import { getUser } from "../../utils/auth";
 
 function Dashboard() {
   const [userData, setUserData] = useState(null);
@@ -34,12 +34,11 @@ function Dashboard() {
       .catch((error) => console.error("Error fetching provider:", error));
   }, [providerType, email]);
   
-
   return (
     <div className="flex flex-col items-center space-y-6 pt-24 px-6 w-full">
       <Navbar />
 
-      {/* ✅ User info from token */}
+      {/* User info from token */}
       <div className="text-center text-gray-700">
         {authUser ? (
           <p className="text-md">
@@ -66,7 +65,6 @@ function Dashboard() {
       </div>
 
       {/* Portfolio Showcase Section */}
-      
       {userData && (
         <PortfolioShowcase
           portfolioData={userData?.Portfolio || {}}

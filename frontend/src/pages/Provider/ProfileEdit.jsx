@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Navbar from "../components/Navbar";
-import { getUser } from "../utils/auth";
-import AvailabilityToggle from "../components/AvailabilityToggle"; // Adjust the path as needed
+import Navbar from "../../components/Navbar";
+import { getUser } from "../../utils/auth";
+import AvailabilityToggle from "../../components/providerComponents/AvailabilityToggle"; // Adjust the path as needed
 
 const ProfileEdit = () => {
   const authUser = getUser();
@@ -134,16 +134,6 @@ const ProfileEdit = () => {
               name="Phone"
               type="tel"
               value={formData.Phone}
-              onChange={handleChange}
-              className="w-full border rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Change Password</label>
-            <input
-              name="Password"
-              type="password"
-              value={formData.Password}
               onChange={handleChange}
               className="w-full border rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black"
             />

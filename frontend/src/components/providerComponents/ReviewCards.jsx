@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ReviewCard from "./ReviewCard";
-import { getUser } from "../utils/auth";
+import { getUser } from "../../utils/auth";
 
 const ReviewCards = () => {
   const [reviews, setReviews] = useState([]);

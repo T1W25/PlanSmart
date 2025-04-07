@@ -1,6 +1,6 @@
 // src/components/RedirectHome.jsx
 import { Navigate } from "react-router-dom";
-import { isLoggedIn } from "../utils/auth";
+import { isLoggedIn, getUser } from "../utils/auth";
 
 const RedirectHome = () => {
   if (!isLoggedIn()) {
@@ -10,7 +10,7 @@ const RedirectHome = () => {
   const user = getUser();
 
   if (user?.role === "organization") {
-    return <Navigate to="/organization" />;
+    return <Navigate to="/orgdashboard" />;
   }
 
   return <Navigate to="/dashboard" />;

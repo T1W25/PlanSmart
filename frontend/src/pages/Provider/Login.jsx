@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { isLoggedIn, saveUser } from "../utils/auth";
-import Navbar from "../components/Navbar";
+import { isLoggedIn, saveUser } from "../../utils/auth";
+import Navbar from "../../components/Navbar";
 import { jwtDecode } from "jwt-decode";
 
 
@@ -11,7 +11,7 @@ function Login() {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
 
-    // ✅ Redirect in useEffect
+    // Redirect in useEffect
     useEffect(() => {
       if (isLoggedIn()) navigate("/dashboard");
     }, []);
@@ -61,7 +61,7 @@ function Login() {
       <Navbar />
       <div className="flex flex-col items-center justify-center pt-20 px-4">
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Login
+          Service Provider Login
         </h1>
 
         <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
@@ -90,16 +90,16 @@ function Login() {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200"
+              className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-700 transition duration-200 cursor-pointer"
             >
               Login
             </button>
           </form>
 
           <div className="mt-4 text-center text-sm text-gray-600">
-           To Sign in as an Organization{" "}
+           To Sign in as an <span className="text-black font-bold">Organization</span>{" "}
             <button
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 hover:underline cursor-pointer"
               onClick={() => navigate("/pages/orglogin")}
             >
               Click here
@@ -109,7 +109,7 @@ function Login() {
           <div className="mt-4 text-center text-sm text-gray-600">
             Don’t have an account?{" "}
             <button
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 hover:underline cursor-pointer"
               onClick={() => navigate("/register")}
             >
               Register here

@@ -7,18 +7,18 @@ const Vendor = require('../models/Vendor');
 const GuestSpeaker = require('../models/GuestSpeaker');
 require('dotenv').config();
 
-// ✅ Configure Multer for File Upload (In-Memory Storage)
+// Configure Multer for File Upload (In-Memory Storage)
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// ✅ Cloudinary Configuration
+// Cloudinary Configuration
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// ✅ GET: Retrieve Portfolio by ID
+// GET: Retrieve Portfolio by ID
 router.get('/:id', async (req, res) => {
   try {
     const entityId = req.params.id;
@@ -38,7 +38,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// ✅ PUT: Update Portfolio (Auto-Detects Entity)
+// PUT: Update Portfolio (Auto-Detects Entity)
 // Unified PUT Route for Portfolio Updates
 router.put('/:id', async (req, res) => {
   try {
@@ -54,7 +54,7 @@ router.put('/:id', async (req, res) => {
           return res.status(404).json({ msg: "Entity not found in any collection" });
       }
 
-      // ✅ Perform the update (Modify the nested Portfolio)
+      // Perform the update (Modify the nested Portfolio)
       const updatedEntity = await entity.constructor.findByIdAndUpdate(
           entityId,
           { 
@@ -66,7 +66,7 @@ router.put('/:id', async (req, res) => {
           { new: true, runValidators: true }
       );
 
-      res.json({ msg: "✅ Portfolio updated successfully", updatedEntity });
+      res.json({ msg: "Portfolio updated successfully", updatedEntity });
 
   } catch (error) {
       console.error("Portfolio Update Error:", error);
@@ -75,7 +75,7 @@ router.put('/:id', async (req, res) => {
 });
 
 
-// ✅ POST: Upload Media to Cloudinary & Save to Portfolio
+//POST: Upload Media to Cloudinary & Save to Portfolio
 router.post('/upload/:id', upload.single('media'), async (req, res) => {
   try {
     const { id } = req.params;
@@ -87,13 +87,13 @@ router.post('/upload/:id', upload.single('media'), async (req, res) => {
 
     console.log(`Uploading file for ID: ${id}`);
 
-    // ✅ Upload file to Cloudinary with resizing
+    // Upload file to Cloudinary with resizing
     cloudinary.uploader.upload_stream(
       {
         resource_type: "auto",
         folder: "portfolios",
         transformation: [
-          { width: 800, height: 600, crop: "limit" }, // ✅ Resize to 800x600
+          { width: 800, height: 600, crop: "limit" }, // Resize to 800x600
         ],
       },
       async (error, uploadedFile) => {
@@ -102,7 +102,7 @@ router.post('/upload/:id', upload.single('media'), async (req, res) => {
           return res.status(500).json({ msg: "Cloudinary upload failed", error });
         }
 
-        console.log("✅ File Uploaded:", uploadedFile.secure_url);
+        console.log("File Uploaded:", uploadedFile.secure_url);
 
         let entity = await Vendor.findById(id) || 
                      await GuestSpeaker.findById(id) || 
@@ -119,7 +119,7 @@ router.post('/upload/:id', upload.single('media'), async (req, res) => {
         );
 
         res.json({
-          msg: "✅ Media uploaded successfully",
+          msg: "Media uploaded successfully",
           mediaUrl: uploadedFile.secure_url,
           updatedEntity,
         });
@@ -132,7 +132,7 @@ router.post('/upload/:id', upload.single('media'), async (req, res) => {
   }
 });
 
-// ✅ DELETE: Remove media from Cloudinary & Database
+// DELETE: Remove media from Cloudinary & Database
 router.delete('/media/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -155,13 +155,13 @@ router.delete('/media/:id', async (req, res) => {
     // Detect media type
     const isVideo = mediaUrl.match(/\.(mp4|webm|ogg)$/i);
 
-    // ✅ Delete from Cloudinary
+    //Delete from Cloudinary
     const cloudinaryResponse = await cloudinary.uploader.destroy(
       `portfolios/${publicId}`,
       { resource_type: isVideo ? "video" : "image" }
     );
 
-    console.log("✅ Cloudinary Delete Response:", cloudinaryResponse);
+    console.log("Cloudinary Delete Response:", cloudinaryResponse);
 
     if (cloudinaryResponse.result !== "ok" && cloudinaryResponse.result !== "not found") {
       return res.status(500).json({ msg: "Failed to delete media from Cloudinary", cloudinaryResponse });
@@ -183,12 +183,12 @@ router.delete('/media/:id', async (req, res) => {
     );
 
     res.json({
-      msg: "✅ Media deleted successfully",
+      msg: "Media deleted successfully",
       updatedEntity,
     });
 
   } catch (error) {
-    console.error("❌ Media Delete Error:", error.message);
+    console.error("Media Delete Error:", error.message);
     console.error(error.stack);
     res.status(500).json({ msg: "Server Error", error: error.message });
   }

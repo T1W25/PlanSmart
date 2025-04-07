@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
-import Navbar from '../components/Navbar';
+import Navbar from '../../components/Navbar';
 
 const Booking = () => {
   const [selectedRange, setSelectedRange] = useState({ from: undefined, to: undefined });

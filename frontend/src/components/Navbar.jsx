@@ -34,9 +34,9 @@ const Navbar = () => {
         {user?.role === "organization" && (
           <>
         <Link to="/orgdashboard" className="text-black-600 text-sm hover:text-black transition-transform duration-300 transform hover:scale-105">
-          Dashboard
+          My Profile
         </Link>
-        <Link to="/booking" className="text-black-600 text-sm hover:text-black transition-transform duration-300 transform hover:scale-105">
+        <Link to="/event" className="text-black-600 text-sm hover:text-black transition-transform duration-300 transform hover:scale-105">
           Manage Events
         </Link>
         <Link to="/viewproviders" className="text-black-600 text-sm hover:text-black transition-transform duration-300 transform hover:scale-105">

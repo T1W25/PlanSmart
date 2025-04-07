@@ -4,13 +4,14 @@ const Vendor = require('../models/Vendor');
 
 router.get("/", async (req, res) => {
   try {
-    const Vendors = await Vendor.find();
+    const Vendors = await Vendor.find().sort({ isAvailable: -1, isVerified: -1 });
     res.json(Vendors);
   } catch (error) {
     console.error("Fetch Vendor Error:", error);
     res.status(500).json({ msg: "Server Error" });
   }
 });
+
 
 // ✅ GET all vendor portfolios with prioritization for verified vendors and search
 router.get('/search', async (req, res) => {
@@ -78,7 +79,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// ✅ POST: Create a new Vendor profile
+// POST: Create a new Vendor profile
 router.post('/', async (req, res) => {
   try {
     const newPortfolio = new Vendor(req.body);
@@ -90,7 +91,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// ✅ PUT: Update a vendor by ID
+// PUT: Update a vendor by ID
 router.put('/:id', async (req, res) => {
   try {
     const updatedVendor = await Vendor.findByIdAndUpdate(
@@ -108,7 +109,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// ✅ DELETE: Remove a vendor by ID
+// DELETE: Remove a vendor by ID
 router.delete('/:id', async (req, res) => {
   try {
     const deletedVendor = await Vendor.findByIdAndDelete(req.params.id);

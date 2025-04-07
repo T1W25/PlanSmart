@@ -48,6 +48,9 @@ const registerRoutes = require('./routes/register'); //New
 const bookingStatusRoutes = require('./routes/bookingStatusRoutes');
 
 const signInRoutes = require('./routes/signIn');
+const eventInvites = require('./routes/eventInvites')
+
+const adminRoutes = require('./routes/adminRoutes');
 
 
 
@@ -67,6 +70,8 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/booking', bookingRoutes);
 app.use('/api/register', registerRoutes); // New
 app.use('/api/booking', bookingStatusRoutes);
+app.use('/api/event-invites',eventInvites);
+app.use('/api/admin', adminRoutes);
 
 
 
