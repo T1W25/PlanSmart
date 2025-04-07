@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Navbar from "../components/Navbar";
-import { getUser } from "../utils/auth";
+import Navbar from "../../components/Navbar";
+import { getUser } from "../../utils/auth";
 
 
 const ProfileView = () => {

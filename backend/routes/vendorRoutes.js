@@ -79,7 +79,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// ✅ POST: Create a new Vendor profile
+// POST: Create a new Vendor profile
 router.post('/', async (req, res) => {
   try {
     const newPortfolio = new Vendor(req.body);
@@ -91,7 +91,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// ✅ PUT: Update a vendor by ID
+// PUT: Update a vendor by ID
 router.put('/:id', async (req, res) => {
   try {
     const updatedVendor = await Vendor.findByIdAndUpdate(
@@ -109,7 +109,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// ✅ DELETE: Remove a vendor by ID
+// DELETE: Remove a vendor by ID
 router.delete('/:id', async (req, res) => {
   try {
     const deletedVendor = await Vendor.findByIdAndDelete(req.params.id);

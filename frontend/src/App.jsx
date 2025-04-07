@@ -1,28 +1,34 @@
-import Portfolio from './components/PortfolioDisplay';
-import PortfolioEditor from './pages/PortfolioEditor';
-import Dashboard from './pages/Dashboard';
-import ProfileEdit from './pages/ProfileEdit';
-import ProfileView from './pages/ProfileView';
-import Booking from './pages/Booking';
-import Register from './pages/Register';
+import Portfolio from "./components/providerComponents/PortfolioDisplay";
+import PortfolioEditor from "./pages/PortfolioEditor";
+import Dashboard from "./pages/Dashboard";
+import ProfileEdit from "./pages/ProfileEdit";
+import ProfileView from "./pages/ProfileView";
+import Booking from "./pages/Booking";
+import Register from "./pages/Register";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import OrgLogin from './pages/OrgLogin';
-import Login from './pages/Login'; // 👈 Import
-import ProtectedRoute from './components/ProtectedRoute'; // ⬅️ import this
-import RedirectHome from './components/redirectHome';
-import OrganizationDashboard from './pages/Organization/OrganizationDashboard';
-import OrgRegister from './pages/OrgRegister';
-import Unauthorized from './pages/Unauthorized';
-import ViewProviders from './pages/Organization/ViewProviders';
-import AddReview from './pages/Organization/AddReview';
-import CreateEvent from './pages/Organization/CreateEvent';
-import Event from './pages/Organization/Events'
+import OrgLogin from "./pages/Organization/OrgLogin";
+import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
+import RedirectHome from "./components/redirectHome";
+import OrganizationDashboard from "./pages/Organization/OrganizationDashboard";
+import OrgRegister from "./pages/Organization/OrgRegister";
+import Unauthorized from "./pages/Unauthorized";
+import ViewProviders from "./pages/Organization/ViewProviders";
+import AddReview from "./pages/Organization/AddReview";
+import CreateEvent from "./pages/Organization/CreateEvent";
+import Event from "./pages/Organization/Events";
+import ProviderDashboard from "./pages/Organization/ProviderDashboard";
+import ProviderPortfolio from "./pages/Organization/ProviderPortfolioShowcase";
+import ProviderProfile from "./pages/Organization/ProviderProfile";
+import ProviderPortfolioshowoff from "./pages/Organization/ProviderPortfolio";
+import EditEvent from "./pages/Organization/EditEvent";
+
 
 function App() {
   return (
     <Router>
       <Routes>
-      <Route path="/" element={<RedirectHome />} />
+        <Route path="/" element={<RedirectHome />} />
         <Route path="/register" element={<Register />} />
         {/* Protected routes */}
         <Route
@@ -46,7 +52,7 @@ function App() {
           path="/viewproviders"
           element={
             <ProtectedRoute allowedRoles={["organization"]}>
-              <ViewProviders/>
+              <ViewProviders />
             </ProtectedRoute>
           }
         />
@@ -55,7 +61,7 @@ function App() {
           path="/addreview/:id"
           element={
             <ProtectedRoute allowedRoles={["organization"]}>
-              <AddReview/>
+              <AddReview />
             </ProtectedRoute>
           }
         />
@@ -87,6 +93,15 @@ function App() {
           }
         />
 
+        <Route
+          path="/edit-event/:eventId"
+          element={
+            <ProtectedRoute allowedRoles={["organization"]}>
+              <EditEvent />
+            </ProtectedRoute>
+          }
+        />
+
         {/* The rest (not protected) */}
         <Route path="/login" element={<Login />} />
         <Route path="/pages/profileedit" element={<ProfileEdit />} />
@@ -97,6 +112,19 @@ function App() {
         <Route path="/pages/orgregister" element={<OrgRegister />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/viewproviders" element={<ViewProviders />} />
+        <Route
+          path="/provider-dashboard/:providerType/:id"
+          element={<ProviderDashboard />}
+        />
+        <Route path="/provider-portfolio" element={<ProviderPortfolio />} />
+        <Route
+          path="/providerprofile/:providerType/:id"
+          element={<ProviderProfile />}
+        />
+        <Route
+          path="/providerporfolioshow/:providerType/:id"
+          element={<ProviderPortfolioshowoff />}
+        />
       </Routes>
     </Router>
   );

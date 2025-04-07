@@ -1,8 +1,12 @@
-// src/components/ProviderCard.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const ProviderCard = ({ id, name, email, phone, rating, isVerified, providerType }) => {
+  const normalizedType =
+  providerType === "Vendor" ? "vendors"
+  : providerType === "Guest Speaker" ? "guest-speakers"
+  : providerType === "Transportation Provider" ? "transportation-providers"
+  : "";
   const navigate = useNavigate();
   const renderStars = (rating) => {
     const totalStars = 5;
@@ -24,7 +28,7 @@ const ProviderCard = ({ id, name, email, phone, rating, isVerified, providerType
         <div className="flex flex-col items-end space-y-1">
           <div className="flex space-x-1">{renderStars(rating ?? 0)}</div>
           <p className={`text-sm font-semibold ${isVerified ? "text-green-600" : "text-red-500"}`}>
-            {isVerified ? "✔ Verified" : "✘ Not Verified"}
+            {isVerified ? "✅ Verified" : "❌ Not Verified"}
           </p>
         </div>
       </div>
@@ -33,7 +37,9 @@ const ProviderCard = ({ id, name, email, phone, rating, isVerified, providerType
         <button className="px-4 py-2 bg-blue-100 text-black rounded-lg hover:bg-gray-300 focus:outline-none cursor-pointer" onClick={() => navigate(`/addreview/${id}`)}>
           Add Review
         </button>
-        <button className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-700 focus:outline-none cursor-pointer" onClick={() => navigate(`/viewprofile/${id}`)}>
+        <button className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-700 focus:outline-none cursor-pointer" onClick={() => navigate(`/provider-dashboard/${normalizedType}/${id}`)
+        } 
+        >
           View Profile
         </button>
       </div>

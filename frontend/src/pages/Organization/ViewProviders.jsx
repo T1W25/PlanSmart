@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
-import ProviderList from "../../components/ProviderList";
+import ProviderList from "../../components/OrgComponents/ProviderList";
 
 const ViewProviders = () => {
   const [activeTab, setActiveTab] = useState("vendors");

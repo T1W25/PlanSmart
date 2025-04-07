@@ -7,6 +7,7 @@ const ProviderSubSchema = new mongoose.Schema({
     enum: ["TransportationProvider", "Vendor", "GuestSpeaker"],
     required: true
   },
+  rate: { type: Number, required: true},
   providerName: { type: String, required: true },
 }, { _id: false });
 
@@ -18,9 +19,7 @@ const EventSchema = new mongoose.Schema({
   date: { type: Date, required: true },
   numberOfGuests: { type: Number, required: true },
   location: {type: String},
-  rate: { type: Number, required: true},
   providers: [ProviderSubSchema],
-  bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: "Booking" }]
 }, {
   timestamps: true
 });

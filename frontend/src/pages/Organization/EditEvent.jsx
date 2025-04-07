@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import { getUser } from "../../utils/auth";
 
-const CreateEvent = () => {
+const EditEvent = () => {
+  const { eventId } = useParams();
   const navigate = useNavigate();
   const user = getUser();
 
@@ -16,11 +17,44 @@ const CreateEvent = () => {
     location: "",
   });
 
-  const [providerType, setProviderType] = useState("");
   const [providerOptions, setProviderOptions] = useState([]);
+  const [selectedProviders, setSelectedProviders] = useState([]);
+  const [providerType, setProviderType] = useState("");
   const [selectedProviderId, setSelectedProviderId] = useState("");
   const [providerRate, setProviderRate] = useState("");
-  const [selectedProviders, setSelectedProviders] = useState([]);
+
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5050/api/organization/events/${user.organizationID}`
+        );
+        const targetEvent = res.data.find((e) => e._id === eventId);
+        if (targetEvent) {
+          setFormData({
+            eventName: targetEvent.eventName,
+            eventDescription: targetEvent.eventDescription,
+            date: targetEvent.date?.slice(0, 10), // date format for input (date picker)
+            numberOfGuests: targetEvent.numberOfGuests,
+            location: targetEvent.location,
+          });
+          setSelectedProviders(
+            (targetEvent.providers || []).map((p) => ({
+              providerID: p.providerID || p._id, // normalize
+              providerName: p.providerName,
+              providerType: p.providerType,
+              rate: p.rate || 0,
+              inviteId: p._id,
+            }))
+          );
+        }
+      } catch (err) {
+        console.error("Failed to fetch event:", err);
+      }
+    };
+
+    if (eventId) fetchEvent();
+  }, [eventId, user.organizationID]);
 
   useEffect(() => {
     if (!providerType) return;
@@ -52,20 +86,13 @@ const CreateEvent = () => {
 
   const handleAddProvider = () => {
     const found = providerOptions.find((p) => p._id === selectedProviderId);
-    if (!found || selectedProviders.some((sp) => sp.providerID === found._id))
+    if (!found || selectedProviders.some((p) => p.providerID === found._id))
       return;
-
-    const normalizedType =
-      providerType === "Vendor"
-        ? "Vendor"
-        : providerType === "GuestSpeaker"
-        ? "GuestSpeaker"
-        : "TransportationProvider";
 
     const providerEntry = {
       providerID: found._id,
       providerName: found.Name,
-      providerType: normalizedType,
+      providerType,
       rate: Number(providerRate),
     };
 
@@ -74,48 +101,69 @@ const CreateEvent = () => {
     setProviderRate("");
   };
 
-  const handleRemoveProvider = (id) => {
-    setSelectedProviders((prev) => prev.filter((p) => p.providerID !== id));
+  const handleRemoveProvider = async (p) => {
+    if (!p.inviteId) {
+      console.error("No inviteId found to delete");
+      return;
+    }
+
+    try {
+      await axios.delete(
+        `http://localhost:5050/api/event-invites/${p.inviteId}`
+      );
+
+      setSelectedProviders((prev) =>
+        prev.filter((provider) => provider.inviteId !== p.inviteId)
+      );
+      alert('Event Invite Rescinded');
+    } catch (err) {
+      console.error("Failed to delete provider from backend:", err);
+      alert("Could not remove provider from event. Please try again.");
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const newProviders = selectedProviders.filter(p => !p.inviteId);
+  
+      if (newProviders.length > 0) {
+        const invitePayload = {
+          invites: newProviders.map(p => ({
+            eventId,
+            providerId: p.providerID,
+            providerName: p.providerName,
+            providerType: p.providerType,
+            rate: p.rate,
+            status: "pending",
+          })),
+        };
+  
+        await axios.post("http://localhost:5050/api/event-invites", invitePayload);
+      }
+  
       const payload = {
         ...formData,
         numberOfGuests: Number(formData.numberOfGuests),
         organizationId: user.organizationID,
         organizationName: user.name,
-        providers: selectedProviders,
+        providers: selectedProviders, 
       };
-
-      const eventRes = await axios.post(
-        "http://localhost:5050/api/organization/events",
-        payload
-      );
-      const eventId = eventRes.data?.event?._id;
-      if (!eventId) throw new Error("Event creation failed");
-
-      const invites = selectedProviders.map((p) => ({
-        eventId,
-        providerId: p.providerID,
-        providerName: p.providerName,
-        providerType: p.providerType,
-        rate: p.rate,
-      }));
-
-      await axios.post("http://localhost:5050/api/event-invites", { invites });
+  
+      await axios.put(`http://localhost:5050/api/organization/events/${eventId}`, payload);
       navigate("/event");
     } catch (err) {
-      console.error("Error:", err);
+      console.error("Update failed:", err);
+      alert("Could not update event.");
     }
   };
+  
 
   return (
     <>
       <Navbar />
       <div className="pt-24 px-6 max-w-3xl mx-auto">
-        <h2 className="text-2xl font-bold text-center mb-6">Create Event</h2>
+        <h2 className="text-2xl font-bold text-center mb-6">Edit Event</h2>
         <form
           onSubmit={handleSubmit}
           className="space-y-4 bg-white p-6 rounded-lg shadow"
@@ -161,12 +209,10 @@ const CreateEvent = () => {
             placeholder="Location"
           />
 
-          {/* Provider Fields */}
           <select
             value={providerType}
             onChange={(e) => setProviderType(e.target.value)}
             className="w-full p-2 border rounded"
-            required
           >
             <option value="">Select Provider Type</option>
             <option value="Vendor">Vendor</option>
@@ -207,31 +253,28 @@ const CreateEvent = () => {
             </>
           )}
 
-          {/* Display selected providers */}
-          <div className="mt-4 space-y-2">
-            {selectedProviders.map((p) => (
-              <div
-                key={p.providerID}
-                className="flex justify-between items-center bg-gray-100 p-2 rounded"
+          {selectedProviders.map((p) => (
+            <div
+              key={p.inviteId || p.providerID}
+              className="flex justify-between items-center bg-gray-100 p-2 rounded"
+            >
+              <span>
+                {p.providerName} - {p.providerType} - ${p.rate}
+              </span>
+              <button
+                onClick={() => handleRemoveProvider(p)}
+                className="text-red-600 cursor-pointer"
               >
-                <span>
-                  {p.providerName} - {p.providerType} - ${p.rate}
-                </span>
-                <button
-                  onClick={() => handleRemoveProvider(p.providerID)}
-                  className="text-red-600 cursor-pointer"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-          </div>
+                Remove
+              </button>
+            </div>
+          ))}
 
           <button
             type="submit"
             className="w-full bg-black text-white p-2 rounded hover:bg-gray-700 cursor-pointer"
           >
-            Create Event
+            Update Event
           </button>
         </form>
       </div>
@@ -239,4 +282,4 @@ const CreateEvent = () => {
   );
 };
 
-export default CreateEvent;
+export default EditEvent;

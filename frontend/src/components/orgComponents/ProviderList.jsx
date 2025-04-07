@@ -1,4 +1,3 @@
-// src/components/ProviderList.jsx
 import React from "react";
 import ProviderCard from "./ProviderCard";
 

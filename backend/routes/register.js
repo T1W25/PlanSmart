@@ -111,7 +111,7 @@ router.post("/createorg", async (req, res) => {
       });
     }
 
-    console.error("❌ Organization registration error:", error.message);
+    console.error("Organization registration error:", error.message);
     res.status(500).json({ error: "Failed to register organization" });
   }
 });

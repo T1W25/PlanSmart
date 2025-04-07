@@ -3,7 +3,7 @@ import axios from "axios";
 import { getUser } from "../../utils/auth";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import EventList from "../../components/EventList";
+import EventList from "../../components/OrgComponents/EventList";
 
 const EventPage = () => {
   const [events, setEvents] = useState([]);
@@ -19,6 +19,16 @@ const EventPage = () => {
       .catch((err) => console.error("Error fetching events:", err));
   }, [orgId]);
 
+  const handleDelete = async (eventId) => {
+    try {
+      await axios.delete(`http://localhost:5050/api/organization/events/${eventId}`);
+      setEvents((prev) => prev.filter((e) => e._id !== eventId));
+    } catch (err) {
+      console.error("Error deleting event:", err);
+    }
+  };
+  
+
   return (
     <>
       <Navbar />
@@ -33,7 +43,7 @@ const EventPage = () => {
           </button>
         </div>
 
-        <EventList events={events} />
+        <EventList events={events} onDelete={handleDelete} />
       </div>
     </>
   );

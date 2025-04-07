@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Navbar from "../components/Navbar";
-import { getUser } from "../utils/auth";
-import AvailabilityToggle from "../components/AvailabilityToggle"; // Adjust the path as needed
+import Navbar from "../../components/Navbar";
+import { getUser } from "../../utils/auth";
+import AvailabilityToggle from "../../components/providerComponents/AvailabilityToggle"; // Adjust the path as needed
 
 const ProfileEdit = () => {
   const authUser = getUser();
