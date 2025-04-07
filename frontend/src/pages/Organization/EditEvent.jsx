@@ -271,6 +271,7 @@ const EditEvent = () => {
           ))}
 
           <button
+            onClick={() => alert("Event updated")}
             type="submit"
             className="w-full bg-black text-white p-2 rounded hover:bg-gray-700 cursor-pointer"
           >

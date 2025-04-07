@@ -27,6 +27,9 @@ const Navbar = () => {
         <Link to="/booking" className="text-black-600 text-sm hover:text-black transition-transform duration-300 transform hover:scale-105">
           Bookings
         </Link>
+
+        
+
         </>)}
         {user?.role === "organization" && (
           <>
@@ -40,13 +43,13 @@ const Navbar = () => {
           View Providers
         </Link>
         </>)}
-        <a 
-          href="#contact" 
+         <Link 
+          to="/contact" 
           className="text-black-600 text-sm hover:text-black transition-transform duration-300 transform hover:scale-105"
         >
           Contact Us
-        </a>
-        
+        </Link>
+
       </div>
 
       {/* Right Side - Sign Out */}

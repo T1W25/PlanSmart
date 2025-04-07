@@ -139,16 +139,6 @@ const ProfileEdit = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Change Password</label>
-            <input
-              name="Password"
-              type="password"
-              value={formData.Password}
-              onChange={handleChange}
-              className="w-full border rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black"
-            />
-          </div>
-          <div>
             <AvailabilityToggle
               checked={formData.isAvailable}
               onChange={() =>

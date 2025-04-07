@@ -1,14 +1,18 @@
 import Portfolio from "./components/providerComponents/PortfolioDisplay";
-import PortfolioEditor from "./pages/PortfolioEditor";
-import Dashboard from "./pages/Dashboard";
-import ProfileEdit from "./pages/ProfileEdit";
-import ProfileView from "./pages/ProfileView";
-import Booking from "./pages/Booking";
-import Register from "./pages/Register";
+import PortfolioEditor from "./pages/Provider/PortfolioEditor";
+import Dashboard from "./pages/Provider/Dashboard";
+import ProfileEdit from "./pages/Provider/ProfileEdit";
+import ProfileView from "./pages/Provider/ProfileView";
+import Booking from "./pages/Provider/Booking";
+import Register from "./pages/Provider/Register";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import OrgLogin from "./pages/Organization/OrgLogin";
-import Login from "./pages/Login";
+import Login from "./pages/Provider/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
+
+import Contact from './pages/Contact';
+
+
 import RedirectHome from "./components/redirectHome";
 import OrganizationDashboard from "./pages/Organization/OrganizationDashboard";
 import OrgRegister from "./pages/Organization/OrgRegister";
@@ -22,6 +26,7 @@ import ProviderPortfolio from "./pages/Organization/ProviderPortfolioShowcase";
 import ProviderProfile from "./pages/Organization/ProviderProfile";
 import ProviderPortfolioshowoff from "./pages/Organization/ProviderPortfolio";
 import EditEvent from "./pages/Organization/EditEvent";
+
 
 
 function App() {
@@ -108,9 +113,13 @@ function App() {
         <Route path="/pages/profileview" element={<ProfileView />} />
         <Route path="/pages/portfoliodisplay" element={<Portfolio />} />
         <Route path="/pages/portfolioeditor" element={<PortfolioEditor />} />
+
+        <Route path="/contact" element={<Contact/>} />
+
         <Route path="/pages/orglogin" element={<OrgLogin />} />
         <Route path="/pages/orgregister" element={<OrgRegister />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
+
         <Route path="/viewproviders" element={<ViewProviders />} />
         <Route
           path="/provider-dashboard/:providerType/:id"
