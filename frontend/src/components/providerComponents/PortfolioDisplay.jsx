@@ -22,7 +22,9 @@ const PortfolioDisplay = () => {
     }
 
     try {
-      const response = await axios.get(`http://localhost:5050/api/portfolio/${userId}`);
+      const response = await axios.get(
+        `http://localhost:5050/api/portfolio/${userId}`
+      );
       setPortfolio(response.data);
     } catch (error) {
       console.error("Error fetching portfolio:", error);
@@ -34,13 +36,18 @@ const PortfolioDisplay = () => {
   const closeModal = () => setModalMedia(null);
 
   const handleDelete = async (mediaUrl) => {
-    const confirm = window.confirm("Are you sure you want to delete this media?");
+    const confirm = window.confirm(
+      "Are you sure you want to delete this media?"
+    );
     if (!confirm) return;
 
     try {
-      await axios.delete(`http://localhost:5050/api/portfolio/media/${userId}`, {
-        data: { mediaUrl }
-      });
+      await axios.delete(
+        `http://localhost:5050/api/portfolio/media/${userId}`,
+        {
+          data: { mediaUrl },
+        }
+      );
 
       // Refresh local state
       setPortfolio((prev) => ({
@@ -64,18 +71,32 @@ const PortfolioDisplay = () => {
           >
             {/* Delete Button */}
             <button
-              onClick={() => handleDelete(media)}
-              className="absolute top-2 right-2 text-white rounded-full px-2 py-1 text-xs opacity-0 group-hover:opacity-100 transition cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete(media);
+              }}
+              className="absolute top-2 right-2 text-white rounded-full px-2 py-1 text-xs opacity-0 group-hover:opacity-100 transition cursor-pointer z-10"
             >
               ❌
             </button>
 
             {/* Media Preview */}
-            <div className="cursor-pointer w-full h-full" onClick={() => openModal(media)}>
+            <div
+              className="cursor-pointer w-full h-full"
+              onClick={() => openModal(media)}
+            >
               {isVideo ? (
-                <video src={media} className="w-full h-full object-cover" muted />
+                <video
+                  src={media}
+                  className="w-full h-full object-cover"
+                  muted
+                />
               ) : (
-                <img src={media} alt={`media-${index}`} className="w-full h-full object-cover" />
+                <img
+                  src={media}
+                  alt={`media-${index}`}
+                  className="w-full h-full object-cover"
+                />
               )}
             </div>
           </div>
@@ -96,9 +117,17 @@ const PortfolioDisplay = () => {
           ❌
         </button>
         {isVideo ? (
-          <video src={modalMedia} controls className="max-h-[80vh] max-w-[90vw]" />
+          <video
+            src={modalMedia}
+            controls
+            className="max-h-[80vh] max-w-[90vw]"
+          />
         ) : (
-          <img src={modalMedia} alt="full-view" className="max-h-[80vh] max-w-[90vw] object-contain" />
+          <img
+            src={modalMedia}
+            alt="full-view"
+            className="max-h-[80vh] max-w-[90vw] object-contain"
+          />
         )}
       </div>
     );
@@ -114,9 +143,19 @@ const PortfolioDisplay = () => {
           <p className="text-red-500">{error}</p>
         ) : portfolio ? (
           <>
-            <p className="text-md text-gray-600 mb-2 font-medium">{portfolio.Type}</p>
-            <p className="text-sm text-gray-700 mb-6">{portfolio.Description}</p>
-            {renderMediaGrid(portfolio.PastWorkMedia)}
+            <p className="text-md text-gray-600 mb-2 font-medium">
+              {portfolio.Type}
+            </p>
+            <p className="text-sm text-gray-700 mb-6">
+              {portfolio.Description}
+            </p>
+            {portfolio.PastWorkMedia && portfolio.PastWorkMedia.length > 0 ? (
+              renderMediaGrid(portfolio.PastWorkMedia)
+            ) : (
+              <p className="text-sm text-gray-500 italic">
+                You have not uploaded any media to your portfolio.
+              </p>
+            )}
           </>
         ) : (
           <p>Loading portfolio...</p>
