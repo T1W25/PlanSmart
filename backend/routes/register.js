@@ -88,7 +88,7 @@ router.post("/createorg", async (req, res) => {
 
     const token = jwt.sign(
       {
-        orgID: newOrg._id,
+        organizationID: newOrg._id,
         email: newOrg.Email,
         name: newOrg.Name,
         role: "organization",
