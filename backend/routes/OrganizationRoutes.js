@@ -4,7 +4,7 @@ const { Organization, Spending } = require("../models/Organization");
 const {
   getOrganizationWithSpending,
   addSpendingRecord
-} = require("../controllers/organizationController"); // Import the controller functions
+} = require("../controllers/OrganizationController"); // Import the controller functions capitlziation
 const Event = require("../models/Events");
 const EventInvite = require("../models/EventInvite");
 const bcrypt = require("bcrypt");
