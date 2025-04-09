@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const PortfolioSchema = require('./Portfolio');
+const PortfolioSchema = require('./portfolio');
 const ClientReviewSchema = require('./ClientReviewSchema');
 const bcrypt = require("bcryptjs");
 
@@ -30,4 +30,4 @@ GuestSpeakerSchema.pre("save", async function (next) {
   next();
 });
 
-module.exports = mongoose.model("GuestSpeaker", GuestSpeakerSchema);
+module.exports = mongoose.model("guestSpeaker", GuestSpeakerSchema);
