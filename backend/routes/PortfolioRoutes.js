@@ -4,7 +4,7 @@ const router = express.Router();
 const cloudinary = require('cloudinary').v2;
 const TransportationProvider = require('../models/TransportationProvider');
 const Vendor = require('../models/Vendor');
-const GuestSpeaker = require('../models/guestSpeaker');
+const GuestSpeaker = require('../models/GuestSpeaker');
 require('dotenv').config();
 
 // Configure Multer for File Upload (In-Memory Storage)
