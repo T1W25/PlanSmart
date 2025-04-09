@@ -9,7 +9,7 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/api': 'http://localhost:5050'
+      '/api': '${import.meta.env.VITE_API_URL}'
     }
   },
   build: {

@@ -21,9 +21,9 @@ const ReviewForm = ({ onSubmitSuccess }) => {
     const fetchProviderName = async () => {
       try {
         const endpoints = [
-          `http://localhost:5050/api/vendors/${id}`,
-          `http://localhost:5050/api/guest-speakers/${id}`,
-          `http://localhost:5050/api/transportation-providers/${id}`,
+          `${import.meta.env.VITE_API_URL}/api/vendors/${id}`,
+          `${import.meta.env.VITE_API_URL}/api/guest-speakers/${id}`,
+          `${import.meta.env.VITE_API_URL}/api/transportation-providers/${id}`,
         ];
 
         for (let url of endpoints) {
@@ -52,7 +52,7 @@ const ReviewForm = ({ onSubmitSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`http://localhost:5050/api/reviews/${id}`, formData);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/reviews/${id}`, formData);
       if (onSubmitSuccess) onSubmitSuccess();
       setFormData({ clientName: user?.name, rating: 1, reviewText: "" });
       setSuccessMsg("Your review has been submitted!");

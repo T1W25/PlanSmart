@@ -24,7 +24,7 @@ function ProviderDashboard() {
     if (!endpoint) return;
 
     axios
-      .get(`http://localhost:5050/api/${endpoint}/${id}`)
+      .get(`${import.meta.env.VITE_API_URL}/api/${endpoint}/${id}`)
       .then((res) => setProviderData(res.data))
       .catch((err) => {
         console.warn("Provider not found:", err?.response?.status);

@@ -32,7 +32,7 @@ const CreateEvent = () => {
     };
 
     axios
-      .get(`http://localhost:5050/api/${endpointMap[providerType]}`)
+      .get(`${import.meta.env.VITE_API_URL}/api/${endpointMap[providerType]}`)
       .then((res) => {
         const key = Object.keys(res.data).find((k) =>
           Array.isArray(res.data[k])
@@ -90,7 +90,7 @@ const CreateEvent = () => {
       };
 
       const eventRes = await axios.post(
-        "http://localhost:5050/api/organization/events",
+        "${import.meta.env.VITE_API_URL}/api/organization/events",
         payload
       );
       const eventId = eventRes.data?.event?._id;
@@ -104,7 +104,7 @@ const CreateEvent = () => {
         rate: p.rate,
       }));
 
-      await axios.post("http://localhost:5050/api/event-invites", { invites });
+      await axios.post("${import.meta.env.VITE_API_URL}/api/event-invites", { invites });
       navigate("/event");
     } catch (err) {
       console.error("Error:", err);

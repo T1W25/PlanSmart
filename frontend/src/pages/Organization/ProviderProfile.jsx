@@ -22,7 +22,7 @@ const ProviderProfileView = () => {
     if (!endpoint || !id) return;
 
     axios
-      .get(`http://localhost:5050/api/${endpoint}/${id}`)
+      .get(`${import.meta.env.VITE_API_URL}/api/${endpoint}/${id}`)
       .then((res) => setProvider(res.data))
       .catch((err) => {
         console.error("Failed to fetch provider:", err);

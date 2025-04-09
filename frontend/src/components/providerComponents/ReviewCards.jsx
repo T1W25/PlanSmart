@@ -18,7 +18,7 @@ const ReviewCards = () => {
       }
 
       try {
-        const response = await axios.get(`http://localhost:5050/api/reviews/${userId}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/reviews/${userId}`);
         setReviews(response.data.reviews || []); 
       } catch (err) {
         console.error("Error fetching reviews:", err);

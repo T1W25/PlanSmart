@@ -26,7 +26,7 @@ const ProviderPortfolio = () => {
 
     axios
     axios
-    .get(`http://localhost:5050/api/${endpoint}/${id}`)
+    .get(`${import.meta.env.VITE_API_URL}/api/${endpoint}/${id}`)
     .then((res) => {
       const data = res.data?.Portfolio;
       if (!data || (!data.Type && !data.Description && (!data.PastWorkMedia || data.PastWorkMedia.length === 0))) {

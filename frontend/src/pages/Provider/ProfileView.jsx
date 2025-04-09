@@ -30,7 +30,7 @@ const ProfileView = () => {
     if (!route) return;
 
     axios
-      .get(`http://localhost:5050/api/${route}/${userId}`)
+      .get(`${import.meta.env.VITE_API_URL}/api/${route}/${userId}`)
       .then((res) => {
         const { Name, Email, Phone, isVerified, Portfolio } = res.data;
         setUserData({

@@ -27,7 +27,7 @@ const EditEvent = () => {
     const fetchEvent = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5050/api/organization/events/${user.organizationID}`
+          `${import.meta.env.VITE_API_URL}/api/organization/events/${user.organizationID}`
         );
         const targetEvent = res.data.find((e) => e._id === eventId);
         if (targetEvent) {
@@ -66,7 +66,7 @@ const EditEvent = () => {
     };
 
     axios
-      .get(`http://localhost:5050/api/${endpointMap[providerType]}`)
+      .get(`${import.meta.env.VITE_API_URL}/api/${endpointMap[providerType]}`)
       .then((res) => {
         const key = Object.keys(res.data).find((k) =>
           Array.isArray(res.data[k])
@@ -109,7 +109,7 @@ const EditEvent = () => {
 
     try {
       await axios.delete(
-        `http://localhost:5050/api/event-invites/${p.inviteId}`
+        `${import.meta.env.VITE_API_URL}/api/event-invites/${p.inviteId}`
       );
 
       setSelectedProviders((prev) =>
@@ -139,7 +139,7 @@ const EditEvent = () => {
           })),
         };
   
-        await axios.post("http://localhost:5050/api/event-invites", invitePayload);
+        await axios.post("${import.meta.env.VITE_API_URL}/api/event-invites", invitePayload);
       }
   
       const payload = {
@@ -150,7 +150,7 @@ const EditEvent = () => {
         providers: selectedProviders, 
       };
   
-      await axios.put(`http://localhost:5050/api/organization/events/${eventId}`, payload);
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/organization/events/${eventId}`, payload);
       navigate("/event");
     } catch (err) {
       console.error("Update failed:", err);

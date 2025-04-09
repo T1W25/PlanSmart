@@ -23,7 +23,7 @@ This component serves as the user dashboard, displaying profile information and 
 
 ## API Interaction
 ```js
-axios.get("http://localhost:5050/api/transportation-providers/${userId}")
+axios.get("${import.meta.env.VITE_API_URL}/api/transportation-providers/${userId}")
 ```
 - Fetches transportation provider data by hardcoded test user ID.
 
@@ -162,7 +162,7 @@ This component does not receive any props.
 ## Axios Usage
 ```js
 useEffect(() => {
-  axios.get(`http://localhost:5050/api/transportation-providers/${userId}`)
+  axios.get(`${import.meta.env.VITE_API_URL}/api/transportation-providers/${userId}`)
     .then((res) => {
       const { Name, Email, Phone, isVerified, Portfolio } = res.data;
       setFormData({
@@ -183,7 +183,7 @@ useEffect(() => {
 const handleSubmit = async () => {
   const payload = { Name, Email, Phone };
   if (Password.trim()) payload.Password = Password;
-  await axios.put(`http://localhost:5050/api/transportation-providers/${userId}`, payload);
+  await axios.put(`${import.meta.env.VITE_API_URL}/api/transportation-providers/${userId}`, payload);
 };
 ```
 
@@ -212,7 +212,7 @@ This React component is responsible for displaying a read-only view of a user's 
 - `userData`: Stores the fetched user profile data, including name, email, phone, verification status, and profile image URL.
 
 ## API Integration
-- **GET** request to `http://localhost:5050/api/transportation-providers/:userId` on component mount to fetch profile data.
+- **GET** request to `${import.meta.env.VITE_API_URL}/api/transportation-providers/:userId` on component mount to fetch profile data.
 
 ## UI Behavior
 - Shows a circular profile image at the top.
@@ -223,7 +223,7 @@ This React component is responsible for displaying a read-only view of a user's 
 ```jsx
 useEffect(() => {
   axios
-    .get(\`http://localhost:5050/api/transportation-providers/\${userId}\`)
+    .get(\`${import.meta.env.VITE_API_URL}/api/transportation-providers/\${userId}\`)
     .then((res) => {
       const { Name, Email, Phone, isVerified, Portfolio } = res.data;
       setUserData({

@@ -82,7 +82,7 @@ npm run dev
 ✅ **The application should now be running locally:**
 
 - Frontend: [http://localhost:5173](http://localhost:5173)  
-- Backend API: [http://localhost:5050](http://localhost:5050)
+- Backend API: [${import.meta.env.VITE_API_URL}](${import.meta.env.VITE_API_URL})
 
 
 ---

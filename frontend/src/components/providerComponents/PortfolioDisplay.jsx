@@ -23,7 +23,7 @@ const PortfolioDisplay = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:5050/api/portfolio/${userId}`
+        `${import.meta.env.VITE_API_URL}/api/portfolio/${userId}`
       );
       setPortfolio(response.data);
     } catch (error) {
@@ -43,7 +43,7 @@ const PortfolioDisplay = () => {
 
     try {
       await axios.delete(
-        `http://localhost:5050/api/portfolio/media/${userId}`,
+        `${import.meta.env.VITE_API_URL}/api/portfolio/media/${userId}`,
         {
           data: { mediaUrl },
         }

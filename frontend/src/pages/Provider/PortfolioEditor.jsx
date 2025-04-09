@@ -49,7 +49,7 @@ const PortfolioEditor = ({ initialPortfolio = null }) => {
       const formData = new FormData();
       formData.append("media", selectedFile);
 
-      const uploadUrl = `http://localhost:5050/api/portfolio/upload/${modelId}`;
+      const uploadUrl = `${import.meta.env.VITE_API_URL}/api/portfolio/upload/${modelId}`;
 
       const response = await axios.post(uploadUrl, formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -71,7 +71,7 @@ const PortfolioEditor = ({ initialPortfolio = null }) => {
     e.preventDefault();
 
     try {
-      const url = `http://localhost:5050/api/portfolio/${modelId}`; // Using hardcoded ID
+      const url = `${import.meta.env.VITE_API_URL}/api/portfolio/${modelId}`; // Using hardcoded ID
 
       console.log("Sending request to:", url);
 

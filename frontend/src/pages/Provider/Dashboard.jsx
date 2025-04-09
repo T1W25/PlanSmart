@@ -29,7 +29,7 @@ function Dashboard() {
     if (!route) return;
 
     axios
-      .get(`http://localhost:5050/api/${route}/${authUser.providerID}`)
+      .get(`${import.meta.env.VITE_API_URL}/api/${route}/${authUser.providerID}`)
       .then((response) => setUserData(response.data))
       .catch((error) => console.error("Error fetching provider:", error));
   }, [providerType, email]);

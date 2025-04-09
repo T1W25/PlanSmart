@@ -187,7 +187,7 @@ Used to trigger an API call immediately after the component mounts.
 useEffect(() => {
   const fetchPortfolio = async () => {
     try {
-      const response = await axios.get(\`http://localhost:5050/api/portfolio/\${hardcodedId}\`);
+      const response = await axios.get(\`${import.meta.env.VITE_API_URL}/api/portfolio/\${hardcodedId}\`);
       setPortfolio(response.data);
     } catch (error) {
       setError("Portfolio not found or server error.");
@@ -272,7 +272,7 @@ The `PortfolioItem` component is responsible for displaying a vendor or provider
   - A confirmation prompt is shown.
   - If confirmed, a `DELETE` request is sent to:
     ```
-    http://localhost:5050/api/portfolio/media/67d9acf452f588f77d3d63f9
+    ${import.meta.env.VITE_API_URL}/api/portfolio/media/67d9acf452f588f77d3d63f9
     ```
   - The request body contains the media URL:
     ```json

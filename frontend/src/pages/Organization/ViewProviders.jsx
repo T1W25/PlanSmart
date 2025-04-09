@@ -24,7 +24,7 @@ const ViewProviders = () => {
     }
 
     axios
-      .get(`http://localhost:5050/api/${endpoint}`)
+      .get(`${import.meta.env.VITE_API_URL}/api/${endpoint}`)
       .then((res) => 
         setProviders(res.data))
       .catch((err) => console.error("Error fetching providers:", err));

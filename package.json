@@ -1,6 +1,15 @@
 {
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "bcrypt": "^5.1.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0"
   }
 }

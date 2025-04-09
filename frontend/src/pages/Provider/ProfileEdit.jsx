@@ -32,7 +32,7 @@ const ProfileEdit = () => {
   const route = baseUrlMap[providerType];
   if (!route) return;
     axios
-      .get(`http://localhost:5050/api/${route}/${userId}`)
+      .get(`${import.meta.env.VITE_API_URL}/api/${route}/${userId}`)
       .then((res) => {
         const { Name, Email, Phone, isVerified, Portfolio } = res.data;
         setFormData({
@@ -78,7 +78,7 @@ const ProfileEdit = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:5050/api/${route}/${userId}`,
+        `${import.meta.env.VITE_API_URL}/api/${route}/${userId}`,
         payload
       );
       console.log("Profile updated:", response.data);

@@ -14,14 +14,14 @@ const EventPage = () => {
   useEffect(() => {
     if (!orgId) return;
     axios
-      .get(`http://localhost:5050/api/organization/events/${orgId}`)
+      .get(`${import.meta.env.VITE_API_URL}/api/organization/events/${orgId}`)
       .then((res) => setEvents(res.data))
       .catch((err) => console.error("Error fetching events:", err));
   }, [orgId]);
 
   const handleDelete = async (eventId) => {
     try {
-      await axios.delete(`http://localhost:5050/api/organization/events/${eventId}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/organization/events/${eventId}`);
       setEvents((prev) => prev.filter((e) => e._id !== eventId));
     } catch (err) {
       console.error("Error deleting event:", err);

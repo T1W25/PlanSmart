@@ -23,7 +23,7 @@ const OrganizationDashboard = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(`http://localhost:5050/api/organization/${orgId}`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/organization/${orgId}`);
         setProfileData(res.data);
         setLoading(false);
       } catch (err) {
@@ -45,7 +45,7 @@ const OrganizationDashboard = () => {
   const handleProfileSubmit = async (e) => {
     e.preventDefault();
     try {
-      const updated = await axios.put(`http://localhost:5050/api/organization/${orgId}`, profileData);
+      const updated = await axios.put(`${import.meta.env.VITE_API_URL}/api/organization/${orgId}`, profileData);
       setProfileData(updated.data);
       setIsEditMode(false);
       alert("Profile Updated");
