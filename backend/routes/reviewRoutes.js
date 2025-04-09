@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const GuestSpeaker = require("../models/guestSpeaker");
+const GuestSpeaker = require("../models/GuestSpeaker");
 const Vendor = require("../models/Vendor");
 const TransportationProvider = require("../models/TransportationProvider");
 
