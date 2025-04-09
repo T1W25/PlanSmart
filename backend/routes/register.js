@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 
 const TransportationProvider = require("../models/TransportationProvider");
 const Vendor = require("../models/Vendor");
-const GuestSpeaker = require("../models/guestSpeaker");
+const GuestSpeaker = require("../models/GuestSpeaker");
 const { Organization } = require("../models/Organization");
 
 //Mapped providerType to its respective Mongoose model
