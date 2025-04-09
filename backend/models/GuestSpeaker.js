@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const PortfolioSchema = require('./portfolio');
+const PortfolioSchema = require('./Portfolio');
 const ClientReviewSchema = require('./ClientReviewSchema');
 const bcrypt = require("bcryptjs");
 
