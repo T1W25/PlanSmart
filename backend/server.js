@@ -32,7 +32,7 @@ app.post("/api/upload", upload.single("media"), (req, res) => {
 
 // Route imports
 const guestSpeakerRoutes = require('./routes/guestSpeakerRoutes');
-const vendorRoutes = require('./routes/VendorRoutes');
+const vendorRoutes = require('./routes/vendorRoutes');
 const transportationProviderRoutes = require('./routes/transportationProviderRoutes');
 const portfolioRoutes = require('./routes/PortfolioRoutes');
 const organizationRoutes = require('./routes/OrganizationRoutes');
