@@ -30,7 +30,7 @@ function Login() {
     setMessage(null);
 
     try {
-      const res = await fetch(`https://plansmart-1.onrender.com/api/signin`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
