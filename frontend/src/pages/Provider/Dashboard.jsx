@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import Navbar from "../../components/Navbar";
-import ProfileCards from "../../components/providerComponents/ProfileCards";
-import ReviewCards from "../../components/providerComponents/ReviewCards";
-import PortfolioShowcase from "../../components/providerComponents/PortfolioShowcase";
+import Navbar from "../../components/Navbar.jsx";
+import ProfileCards from "../../components/providerComponents/ProfileCards.jsx";
+import ReviewCards from "../../components/providerComponents/ReviewCards.jsx";
+import PortfolioShowcase from "../../components/providerComponents/PortfolioShowcase.jsx";
 import { getUser } from "../../utils/auth";
 
 function Dashboard() {

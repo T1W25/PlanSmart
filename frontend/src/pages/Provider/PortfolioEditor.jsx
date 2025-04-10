@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { getUser } from "../../utils/auth";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Navbar.jsx";
 
 
 const PortfolioEditor = ({ initialPortfolio = null }) => {

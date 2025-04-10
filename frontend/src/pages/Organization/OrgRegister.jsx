@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Navbar.jsx";
 import { isLoggedIn } from "../../utils/auth";
 
 function OrgRegister() {

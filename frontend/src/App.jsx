@@ -1,31 +1,31 @@
-import Portfolio from "./components/providerComponents/PortfolioDisplay";
-import PortfolioEditor from "./pages/Provider/PortfolioEditor";
-import Dashboard from "./pages/Provider/Dashboard";
-import ProfileEdit from "./pages/Provider/ProfileEdit";
-import ProfileView from "./pages/Provider/ProfileView";
-import Booking from "./pages/Provider/Booking";
-import Register from "./pages/Provider/Register";
+import Portfolio from "./components/providerComponents/PortfolioDisplay.jsx";
+import PortfolioEditor from "./pages/Provider/PortfolioEditor.jsx";
+import Dashboard from "./pages/Provider/Dashboard.jsx";
+import ProfileEdit from "./pages/Provider/ProfileEdit.jsx";
+import ProfileView from "./pages/Provider/ProfileView.jsx";
+import Booking from "./pages/Provider/Booking.jsx";
+import Register from "./pages/Provider/Register.jsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import OrgLogin from "./pages/Organization/OrgLogin";
-import Login from "./pages/Provider/Login";
-import ProtectedRoute from "./components/ProtectedRoute";
+import OrgLogin from "./pages/Organization/OrgLogin.jsx";
+import Login from "./pages/Provider/Login.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 import Contact from './pages/Contact';
 
 
-import RedirectHome from "./components/redirectHome";
-import OrganizationDashboard from "./pages/Organization/OrganizationDashboard";
-import OrgRegister from "./pages/Organization/OrgRegister";
-import Unauthorized from "./pages/Unauthorized";
-import ViewProviders from "./pages/Organization/ViewProviders";
-import AddReview from "./pages/Organization/AddReview";
-import CreateEvent from "./pages/Organization/CreateEvent";
-import Event from "./pages/Organization/Events";
-import ProviderDashboard from "./pages/Organization/ProviderDashboard";
-import ProviderPortfolio from "./pages/Organization/ProviderPortfolioShowcase";
-import ProviderProfile from "./pages/Organization/ProviderProfile";
-import ProviderPortfolioshowoff from "./pages/Organization/ProviderPortfolio";
-import EditEvent from "./pages/Organization/EditEvent";
+import RedirectHome from "./components/redirectHome.jsx";
+import OrganizationDashboard from "./pages/Organization/OrganizationDashboard.jsx";
+import OrgRegister from "./pages/Organization/OrgRegister.jsx";
+import Unauthorized from "./pages/Unauthorized.jsx";
+import ViewProviders from "./pages/Organization/ViewProviders.jsx";
+import AddReview from "./pages/Organization/AddReview.jsx";
+import CreateEvent from "./pages/Organization/CreateEvent.jsx";
+import Event from "./pages/Organization/Events.jsx";
+import ProviderDashboard from "./pages/Organization/ProviderDashboard.jsx";
+import ProviderPortfolio from "./pages/Organization/ProviderPortfolioShowcase.jsx";
+import ProviderProfile from "./pages/Organization/ProviderProfile.jsx";
+import ProviderPortfolioshowoff from "./pages/Organization/ProviderPortfolio.jsx";
+import EditEvent from "./pages/Organization/EditEvent.jsx";
 
 
 

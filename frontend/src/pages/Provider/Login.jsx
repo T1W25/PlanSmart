@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { isLoggedIn, saveUser } from "../../utils/auth";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Navbar.jsx";
 import { jwtDecode } from "jwt-decode";
 
 

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
-import ProfileCards from "./ProviderProfileCards";
-import ReviewCards from "../../components/providerComponents/ReviewCards";
-import PortfolioShowcase from "./ProviderPortfolioShowcase";
+import ProfileCards from "./ProviderProfileCards.jsx";
+import ReviewCards from "../../components/providerComponents/ReviewCards.jsx";
+import PortfolioShowcase from "./ProviderPortfolioShowcase.jsx";
 
 function ProviderDashboard() {
   const { id, providerType } = useParams();
