@@ -4,7 +4,7 @@ const { Organization} = require("../models/Organization");
 
 
 const Vendor = require("../models/Vendor");
-const GuestSpeaker = require("../models/guestSpeaker");
+const GuestSpeaker = require("../models/GuestSpeaker");
 const TransportationProvider = require("../models/TransportationProvider");
 
 const getProviderModel = (type) => {
