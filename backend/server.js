@@ -4,8 +4,14 @@ const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
 const connectDB = require('./config/db');
-
+const history = require('connect-history-api-fallback');
 const app = express();
+
+
+
+// Handle client-side routes
+app.use(history());
+
 
 // Connect DB (skip during test)
 if (process.env.NODE_ENV !== 'test') {
