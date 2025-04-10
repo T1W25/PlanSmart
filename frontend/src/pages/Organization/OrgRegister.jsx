@@ -33,7 +33,7 @@ function OrgRegister() {
     setMessage(null);
 
     try {
-      const res = await fetch("${import.meta.env.VITE_API_URL}/api/register/createorg", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/register/createorg`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
