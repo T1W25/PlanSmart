@@ -27,7 +27,7 @@ const CreateEvent = () => {
 
     const endpointMap = {
       Vendor: "vendors/search",
-      GuestSpeaker: "guest-speakers/search",git 
+      GuestSpeaker: "guest-speakers/search",
       TransportationProvider: "transportation-providers/search",
     };
 
