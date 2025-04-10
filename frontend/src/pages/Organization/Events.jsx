@@ -3,7 +3,7 @@ import axios from "axios";
 import { getUser } from "../../utils/auth";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import EventList from "../../components/OrgComponents/EventList.jsx";
+import EventList from "../../components/orgComponents/EventList.jsx";
 
 const EventPage = () => {
   const [events, setEvents] = useState([]);
