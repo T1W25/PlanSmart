@@ -9,8 +9,13 @@ const TransportationProvider = require("../models/TransportationProvider");
 const { Organization } = require("../models/Organization");
 
 router.post("/", async (req, res) => {
-  const { email, password } = req.body;
+  console.log('Login request body:', req.body);
 
+  if (!req.body || !req.body.email || !req.body.password) {
+    return res.status(400).json({ error: "Missing email or password" });
+  }
+
+  const { email, password } = req.body;
   const searchQuery = { Email: { $regex: `^${email}$`, $options: 'i' } };
 
   try {
@@ -25,7 +30,7 @@ router.post("/", async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, provider.Password);
     if (!isMatch) {
-      return res.status(400).json({ error: "Invalid usermail or password" });
+      return res.status(400).json({ error: "Invalid email or password" });
     }
 
     const token = jwt.sign(
@@ -46,6 +51,7 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+
 
 router.post("/org", async (req, res) => {
     const { email, password } = req.body;
@@ -82,5 +88,48 @@ router.post("/org", async (req, res) => {
       res.status(500).json({ error: "Server error" });
     }
   });
+
+  router.post("/org", async (req, res) => {
+    console.log('Org login request body:', req.body);
+  
+    // Guard clause for missing input
+    if (!req.body || !req.body.email || !req.body.password) {
+      return res.status(400).json({ error: "Missing email or password" });
+    }
+  
+    const { email, password } = req.body;
+    const searchQuery = { Email: { $regex: `^${email}$`, $options: 'i' } };
+  
+    try {
+      const organization = await Organization.findOne(searchQuery);
+  
+      if (!organization) {
+        return res.status(400).json({ error: "Invalid email or password" });
+      }
+  
+      const isMatch = await bcrypt.compare(password, organization.Password);
+      if (!isMatch) {
+        return res.status(400).json({ error: "Invalid email or password" });
+      }
+  
+      const token = jwt.sign(
+        {
+          organizationID: organization._id,
+          email: organization.Email,
+          name: organization.Name,
+          type: "Organization",
+          role: "organization"
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+  
+      res.json({ token, message: "Organization login successful" });
+    } catch (error) {
+      console.error("Org Login Error:", error);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+  
 
 module.exports = router;
