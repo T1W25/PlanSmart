@@ -8,21 +8,26 @@ const GuestSpeaker = require("../models/GuestSpeaker");
 const TransportationProvider = require("../models/TransportationProvider");
 const { Organization } = require("../models/Organization");
 
+// 🔥 Debug log to confirm file is loaded
+console.log("✅ signIn.js ROUTE FILE LOADED");
+
+// 🔥 Main provider login
 router.post("/", async (req, res) => {
-  console.log('Login request body:', req.body);
+  console.log("🔥 SIGNIN ROUTE HIT");
+  console.log("Login request body:", req.body);
 
   if (!req.body || !req.body.email || !req.body.password) {
     return res.status(400).json({ error: "Missing email or password" });
   }
 
   const { email, password } = req.body;
-  const searchQuery = { Email: { $regex: `^${email}$`, $options: 'i' } };
+  const searchQuery = { Email: { $regex: `^${email}$`, $options: "i" } };
 
   try {
     let provider =
-      await Vendor.findOne(searchQuery) ||
-      await GuestSpeaker.findOne(searchQuery) ||
-      await TransportationProvider.findOne(searchQuery);
+      (await Vendor.findOne(searchQuery)) ||
+      (await GuestSpeaker.findOne(searchQuery)) ||
+      (await TransportationProvider.findOne(searchQuery));
 
     if (!provider) {
       return res.status(400).json({ error: "Invalid email or password" });
@@ -39,7 +44,7 @@ router.post("/", async (req, res) => {
         providerType: provider.ProviderType,
         email: provider.Email,
         name: provider.Name,
-        role: "provider"
+        role: "provider",
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
@@ -52,49 +57,47 @@ router.post("/", async (req, res) => {
   }
 });
 
+// 🔥 Org login
+router.post("/org", async (req, res) => {
+  console.log("🔥 ORG LOGIN ROUTE HIT");
+  console.log("Org login request body:", req.body);
 
+  if (!req.body || !req.body.email || !req.body.password) {
+    return res.status(400).json({ error: "Missing email or password" });
+  }
 
-  router.post("/org", async (req, res) => {
-    console.log('Org login request body:', req.body);
-  
-    // Guard clause for missing input
-    if (!req.body || !req.body.email || !req.body.password) {
-      return res.status(400).json({ error: "Missing email or password" });
+  const { email, password } = req.body;
+  const searchQuery = { Email: { $regex: `^${email}$`, $options: "i" } };
+
+  try {
+    const organization = await Organization.findOne(searchQuery);
+
+    if (!organization) {
+      return res.status(400).json({ error: "Invalid email or password" });
     }
-  
-    const { email, password } = req.body;
-    const searchQuery = { Email: { $regex: `^${email}$`, $options: 'i' } };
-  
-    try {
-      const organization = await Organization.findOne(searchQuery);
-  
-      if (!organization) {
-        return res.status(400).json({ error: "Invalid email or password" });
-      }
-  
-      const isMatch = await bcrypt.compare(password, organization.Password);
-      if (!isMatch) {
-        return res.status(400).json({ error: "Invalid email or password" });
-      }
-  
-      const token = jwt.sign(
-        {
-          organizationID: organization._id,
-          email: organization.Email,
-          name: organization.Name,
-          type: "Organization",
-          role: "organization"
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
-      );
-  
-      res.json({ token, message: "Organization login successful" });
-    } catch (error) {
-      console.error("Org Login Error:", error);
-      res.status(500).json({ error: "Server error" });
+
+    const isMatch = await bcrypt.compare(password, organization.Password);
+    if (!isMatch) {
+      return res.status(400).json({ error: "Invalid email or password" });
     }
-  });
-  
+
+    const token = jwt.sign(
+      {
+        organizationID: organization._id,
+        email: organization.Email,
+        name: organization.Name,
+        type: "Organization",
+        role: "organization",
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.json({ token, message: "Organization login successful" });
+  } catch (error) {
+    console.error("Org Login Error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 module.exports = router;
