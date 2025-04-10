@@ -187,7 +187,7 @@ Used to trigger an API call immediately after the component mounts.
 useEffect(() => {
   const fetchPortfolio = async () => {
     try {
-      const response = await axios.get(\`${import.meta.env.VITE_API_URL}/api/portfolio/\${hardcodedId}\`);
+      const response = await axios.get(\"${import.meta.env.VITE_API_URL}/api/portfolio/\${hardcodedId}\");
       setPortfolio(response.data);
     } catch (error) {
       setError("Portfolio not found or server error.");

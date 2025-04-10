@@ -27,7 +27,7 @@ const CreateEvent = () => {
 
     const endpointMap = {
       Vendor: "vendors/search",
-      GuestSpeaker: "guest-speakers/search",
+      GuestSpeaker: "guest-speakers/search",git 
       TransportationProvider: "transportation-providers/search",
     };
 
@@ -90,7 +90,7 @@ const CreateEvent = () => {
       };
 
       const eventRes = await axios.post(
-        "${import.meta.env.VITE_API_URL}/api/organization/events",
+        `${import.meta.env.VITE_API_URL}/api/organization/events`,
         payload
       );
       const eventId = eventRes.data?.event?._id;
@@ -104,7 +104,7 @@ const CreateEvent = () => {
         rate: p.rate,
       }));
 
-      await axios.post("${import.meta.env.VITE_API_URL}/api/event-invites", { invites });
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/event-invites`, { invites });
       navigate("/event");
     } catch (err) {
       console.error("Error:", err);
